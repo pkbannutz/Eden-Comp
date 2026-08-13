@@ -430,7 +430,10 @@
     .other-wrap { margin-top: 12px; }
     .other-wrap[hidden] { display: none; }
 
-    .route-arrow { color: var(--olive-light); white-space: nowrap; }
+    .route-arrow {
+      color: var(--olive-light);
+      overflow-wrap: anywhere;
+    }
 
     .weakness-grid {
       display: grid;
@@ -915,6 +918,11 @@
 
     .pdf-section.allow-break { break-inside: auto; page-break-inside: auto; }
 
+    .pdf-section-ratings {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
     .pdf-section-title {
       display: grid;
       grid-template-columns: 24px 1fr;
@@ -1013,15 +1021,42 @@
 
     .pdf-rating-table td:nth-child(3) { color: #555a50; }
 
-    .pdf-rating-continuation {
-      margin: 0 0 3mm;
-      padding-bottom: 2mm;
+    .pdf-overall-score {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8mm;
+      align-items: center;
+      padding: 4mm 5mm;
+      margin-top: 5mm;
       color: #252a20;
-      border-bottom: 1px solid #959c65;
+      background: #eef0df;
+      border-left: 3px solid #79804f;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .pdf-overall-score p { margin: 0; }
+
+    .pdf-overall-score-label {
       font-family: Arial Narrow, Arial, sans-serif;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 800;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
+    }
+
+    .pdf-overall-score-detail {
+      margin-top: 1mm !important;
+      color: #656b59;
+      font-size: 8.5px;
+    }
+
+    .pdf-overall-score-value {
+      color: #59603f;
+      font-family: Arial Narrow, Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      white-space: nowrap;
     }
 
     .pdf-footer {
@@ -1772,7 +1807,11 @@
 
       function buildPdfDocument() {
         const name = getValue('full_name');
-        const generated = new Intl.DateTimeFormat('ro-RO', { dateStyle: 'long', timeStyle: 'short' }).format(new Date());
+        const generated = new Intl.DateTimeFormat('ro-RO', {
+          timeZone: 'Europe/Bucharest',
+          dateStyle: 'long',
+          timeStyle: 'short'
+        }).format(new Date());
         const weaknesses = [getValue('weakness_1'), getValue('weakness_2'), getValue('weakness_3')]
           .filter(Boolean)
           .map((item, index) => `${index + 1}. ${item}`)
@@ -1835,13 +1874,27 @@
             <tbody>${rows.join('')}</tbody>
           </table>`;
 
+        const completedScores = ratings
+          .map(([key]) => Number(getValue(`rating_${key}`)))
+          .filter((score) => Number.isInteger(score) && score >= 1 && score <= 10);
+        const overallScore = completedScores.length
+          ? (completedScores.reduce((sum, score) => sum + score, 0) / completedScores.length).toFixed(1)
+          : '';
+        const overallScoreMarkup = `
+          <div class="pdf-overall-score">
+            <div>
+              <p class="pdf-overall-score-label">Scor general autoevaluare</p>
+              <p class="pdf-overall-score-detail">Media celor ${completedScores.length} ${completedScores.length === 1 ? 'notă completată' : 'note completate'}</p>
+            </div>
+            <p class="pdf-overall-score-value">${overallScore ? `${overallScore} / 10` : 'Necompletat'}</p>
+          </div>`;
+
         const section7 = `
-          <section class="pdf-section allow-break">
+          <div class="html2pdf__page-break"></div>
+          <section class="pdf-section pdf-section-ratings">
             <h2 class="pdf-section-title"><span>07</span>Autoevaluare 1–10</h2>
-            ${ratingTable(ratingRows.slice(0, 8))}
-            <div class="html2pdf__page-break"></div>
-            <h3 class="pdf-rating-continuation">07 · Autoevaluare 1–10 · continuare</h3>
-            ${ratingTable(ratingRows.slice(8))}
+            ${ratingTable(ratingRows)}
+            ${overallScoreMarkup}
           </section>`;
 
         const section8 = pdfSection('08', 'Notițe finale', [
@@ -1880,13 +1933,25 @@
       }
 
       function safeFilename(value) {
-        const clean = String(value || 'Chestionar')
+        const clean = String(value || 'Name')
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-zA-Z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '')
+          .replace(/[^a-zA-Z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '')
           .slice(0, 60);
-        return clean || 'Chestionar';
+        return clean || 'Name';
+      }
+
+      function localDateStamp(date = new Date()) {
+        const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Europe/Bucharest',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).formatToParts(date)
+          .filter((part) => part.type !== 'literal')
+          .map((part) => [part.type, part.value]));
+        return `${parts.year}-${parts.month}-${parts.day}`;
       }
 
       function formatFileSize(bytes) {
@@ -2011,7 +2076,7 @@
           const athlete = safeFilename(getValue('full_name'));
           const options = {
             margin: [8, 7, 8, 7],
-            filename: `EDEN-Competition-Camp-${athlete}.pdf`,
+            filename: `${athlete}_eden_comp_${localDateStamp()}.pdf`,
             image: { type: 'jpeg', quality: 0.96 },
             html2canvas: {
               scale: 2,
