@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060806">
+  <meta name="description" content="Chestionar interactiv EDEN Jiu Jitsu pentru Competition Camp și construirea game plan-ului.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>EDEN Competition Camp | Chestionar Game Plan</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #060806;
+      --surface: #0c100c;
+      --surface-raised: #11170f;
+      --surface-soft: #171d14;
+      --ink: #f2f0e8;
+      --muted: #a8ad9b;
+      --olive: #959c65;
+      --olive-light: #bac18a;
+      --olive-dark: #697044;
+      --line: rgba(186, 193, 138, 0.22);
+      --line-strong: rgba(186, 193, 138, 0.48);
+      --danger: #d9a38f;
+      --success: #b5c37f;
+      --radius: 16px;
+      --shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+      --display: "Arial Narrow", "Liberation Sans Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+      --body: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    button, label, input[type="radio"], input[type="checkbox"] { -webkit-tap-highlight-color: transparent; }
+
+    a { color: inherit; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      color: #11140e;
+      background: var(--olive-light);
+      border-radius: 8px;
+      transform: translateY(-160%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .page-shell {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      padding: 34px 0 26px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .brand-logo {
+      display: block;
+      width: min(310px, 48vw);
+      height: auto;
+      mix-blend-mode: screen;
+    }
+
+    .camp-label {
+      margin: 0;
+      color: var(--olive-light);
+      font-family: var(--display);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
+      gap: 48px;
+      align-items: end;
+      padding: 68px 0 48px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--olive-light);
+      font-family: var(--display);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(3rem, 8vw, 6.6rem);
+      font-stretch: condensed;
+      font-weight: 900;
+      letter-spacing: -0.045em;
+      line-height: 0.84;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    h1 span { color: var(--olive); }
+
+    .hero-note {
+      margin: 0;
+      padding: 20px 0 4px 24px;
+      color: var(--muted);
+      border-left: 1px solid var(--line-strong);
+      font-size: 0.96rem;
+    }
+
+    .hero-note strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 1.05rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .progress-dock {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      background: rgba(6, 8, 6, 0.94);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .progress-inner {
+      display: grid;
+      grid-template-columns: auto minmax(120px, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      min-height: 64px;
+    }
+
+    .progress-title,
+    .progress-count {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .progress-title { color: var(--muted); }
+    .progress-count { color: var(--olive-light); text-align: right; }
+
+    .progress-track {
+      position: relative;
+      height: 4px;
+      overflow: hidden;
+      background: var(--surface-soft);
+      border-radius: 99px;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: var(--olive-light);
+      border-radius: inherit;
+      transition: width 180ms ease;
+    }
+
+    .autosave-status {
+      grid-column: 1 / -1;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    main { padding: 40px 0 80px; }
+
+    form { display: grid; gap: 18px; }
+
+    .form-section {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: clip;
+    }
+
+    .section-index {
+      padding: 30px 24px;
+      color: var(--olive-light);
+      background: var(--surface-raised);
+      border-right: 1px solid var(--line);
+      font-family: var(--display);
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+
+    .section-content { padding: 31px clamp(22px, 4vw, 42px) 40px; }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(1.65rem, 3.4vw, 2.35rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .section-hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: right;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px 18px;
+    }
+
+    .question {
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      margin: 0;
+    }
+
+    .question.full { grid-column: 1 / -1; }
+
+    .question-title,
+    .field-label,
+    legend {
+      display: block;
+      width: 100%;
+      margin: 0 0 9px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.045em;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-family: var(--body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      min-height: 50px;
+      color: var(--ink);
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      outline: none;
+      padding: 13px 14px;
+      transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    textarea {
+      min-height: 108px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    input::placeholder, textarea::placeholder { color: #707668; opacity: 1; }
+
+    input:hover, textarea:hover, select:hover { border-color: var(--line-strong); }
+
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    button:focus-visible,
+    .choice input:focus-visible + span,
+    .score-choice input:focus-visible + span {
+      outline: 2px solid var(--olive-light);
+      outline-offset: 3px;
+    }
+
+    input:disabled { cursor: not-allowed; opacity: 0.48; }
+
+    .inline-unit { position: relative; }
+
+    .inline-unit input { padding-right: 46px; }
+
+    .inline-unit span {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .choice { position: relative; cursor: pointer; }
+
+    .choice input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice span {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      color: var(--muted);
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.15;
+      transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+    }
+
+    .choice:hover span {
+      color: var(--ink);
+      border-color: var(--line-strong);
+      transform: translateY(-1px);
+    }
+
+    .choice input:checked + span {
+      color: #10130c;
+      background: var(--olive-light);
+      border-color: var(--olive-light);
+    }
+
+    .choice input:checked + span::before {
+      content: "✓";
+      margin-right: 7px;
+      font-weight: 900;
+    }
+
+    .other-wrap { margin-top: 12px; }
+    .other-wrap[hidden] { display: none; }
+
+    .route-arrow { color: var(--olive-light); white-space: nowrap; }
+
+    .weakness-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-field span {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--olive-light);
+      font-family: var(--display);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .ratings-intro {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+
+    .ratings-intro strong { color: var(--ink); }
+
+    .rating-list { display: grid; gap: 12px; }
+
+    .rating-row {
+      display: grid;
+      grid-template-columns: minmax(145px, 0.58fr) minmax(330px, 1fr) minmax(170px, 0.72fr);
+      gap: 16px;
+      align-items: center;
+      padding: 15px;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+    }
+
+    .rating-name {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    .score-options {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(27px, 1fr));
+      gap: 4px;
+    }
+
+    .score-choice { position: relative; cursor: pointer; }
+
+    .score-choice input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .score-choice span {
+      display: grid;
+      min-height: 34px;
+      place-items: center;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid transparent;
+      border-radius: 6px;
+      font-family: var(--display);
+      font-size: 0.75rem;
+      font-weight: 800;
+      transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+    }
+
+    .score-choice:hover span { color: var(--ink); border-color: var(--line-strong); }
+
+    .score-choice input:checked + span {
+      color: #0d100a;
+      background: var(--olive-light);
+      border-color: var(--olive-light);
+    }
+
+    .rating-note {
+      min-height: 40px !important;
+      padding: 9px 11px !important;
+      font-size: 0.84rem !important;
+    }
+
+    .action-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: clamp(24px, 5vw, 44px);
+      margin-top: 8px;
+      background: var(--olive);
+      color: #10130c;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .action-panel h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); }
+
+    .action-panel p {
+      max-width: 580px;
+      margin: 10px 0 0;
+      color: rgba(16, 19, 12, 0.76);
+      font-size: 0.92rem;
+    }
+
+    .button-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      min-width: 210px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      border: 0;
+      border-radius: 9px;
+      cursor: pointer;
+      font-family: var(--display);
+      font-size: 0.86rem;
+      font-weight: 900;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+      transition: transform 140ms ease, background-color 140ms ease, opacity 140ms ease;
+    }
+
+    .primary-button {
+      gap: 9px;
+      padding: 12px 18px;
+      color: var(--ink);
+      background: #090b08;
+    }
+
+    .primary-button:hover { transform: translateY(-2px); background: #151a11; }
+    .primary-button:disabled { cursor: wait; opacity: 0.7; transform: none; }
+
+    .secondary-button {
+      min-height: 42px;
+      padding: 9px 14px;
+      color: rgba(16, 19, 12, 0.78);
+      background: transparent;
+    }
+
+    .secondary-button:hover { color: #10130c; background: rgba(255, 255, 255, 0.16); }
+
+    .download-icon {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .button-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(242, 240, 232, 0.32);
+      border-top-color: var(--ink);
+      border-radius: 50%;
+      animation: spin 700ms linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 28px 0 42px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 0.78rem;
+    }
+
+    .site-footer strong { color: var(--olive-light); font-family: var(--display); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .toast {
+      position: fixed;
+      z-index: 60;
+      right: 22px;
+      bottom: 22px;
+      max-width: min(390px, calc(100vw - 44px));
+      padding: 13px 16px;
+      color: var(--ink);
+      background: #171c14;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      font-size: 0.88rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      pointer-events: none;
+    }
+
+    .toast.is-visible { opacity: 1; transform: translateY(0); }
+
+    #pdf-root {
+      position: fixed;
+      z-index: -1;
+      top: 0;
+      left: -10000px;
+      width: 190mm;
+      background: #ffffff;
+      color: #171914;
+      font-family: Arial, Helvetica, sans-serif;
+      pointer-events: none;
+    }
+
+    .pdf-document { padding: 0; background: #ffffff; }
+
+    .pdf-header {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 22px;
+      align-items: center;
+      padding: 16mm 14mm 11mm;
+      color: #f2f0e8;
+      background: #080a08;
+      border-bottom: 4px solid #959c65;
+    }
+
+    .pdf-header img { display: block; width: 150px; height: auto; }
+
+    .pdf-header h1 {
+      margin: 0;
+      color: #f2f0e8;
+      font-family: Arial Narrow, Arial, sans-serif;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    .pdf-header h1 span { color: #bac18a; }
+
+    .pdf-header p {
+      margin: 6px 0 0;
+      color: #bac18a;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .pdf-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 7mm 14mm;
+      color: #52584b;
+      background: #f4f3ec;
+      border-bottom: 1px solid #d7d8c7;
+      font-size: 10px;
+    }
+
+    .pdf-body { padding: 8mm 14mm 14mm; }
+
+    .pdf-section {
+      margin: 0 0 6mm;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .pdf-section.allow-break { break-inside: auto; page-break-inside: auto; }
+
+    .pdf-section-title {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 3mm;
+      padding-bottom: 2mm;
+      color: #252a20;
+      border-bottom: 1px solid #959c65;
+      font-family: Arial Narrow, Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .pdf-section-title span {
+      display: grid;
+      width: 22px;
+      height: 22px;
+      place-items: center;
+      color: #ffffff;
+      background: #79804f;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .pdf-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.6mm 5mm;
+    }
+
+    .pdf-answer.full { grid-column: 1 / -1; }
+
+    .pdf-answer {
+      min-width: 0;
+      padding: 2.7mm 3mm;
+      background: #f7f7f2;
+      border-left: 2px solid #b5ba8a;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .pdf-answer-label {
+      margin: 0 0 1.2mm;
+      color: #6d735f;
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    .pdf-answer-value {
+      margin: 0;
+      color: #151812;
+      font-size: 10.5px;
+      line-height: 1.38;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .pdf-answer-value.empty { color: #9a9e92; font-style: italic; }
+
+    .pdf-rating-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+
+    .pdf-rating-table th {
+      padding: 2.2mm;
+      color: #ffffff;
+      background: #303628;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    .pdf-rating-table td {
+      padding: 2mm 2.2mm;
+      color: #30342b;
+      border-bottom: 1px solid #dedfd4;
+      vertical-align: top;
+    }
+
+    .pdf-rating-table td:first-child { color: #252a20; font-weight: 700; }
+
+    .pdf-rating-table tr { break-inside: avoid; page-break-inside: avoid; }
+
+    .pdf-rating-table td:nth-child(2) {
+      width: 18mm;
+      color: #59603f;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .pdf-rating-table td:nth-child(3) { color: #555a50; }
+
+    .pdf-rating-continuation {
+      margin: 0 0 3mm;
+      padding-bottom: 2mm;
+      color: #252a20;
+      border-bottom: 1px solid #959c65;
+      font-family: Arial Narrow, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .pdf-footer {
+      padding: 4mm 14mm 7mm;
+      color: #74796c;
+      border-top: 1px solid #d7d8c7;
+      font-size: 8px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; gap: 26px; align-items: start; }
+      .hero-note { max-width: 600px; }
+      .form-section { grid-template-columns: 82px minmax(0, 1fr); }
+      .section-index { padding: 28px 18px; font-size: 2.2rem; }
+      .rating-row { grid-template-columns: 1fr; gap: 11px; }
+      .rating-note { width: 100%; }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell { width: min(100% - 22px, 1080px); }
+      .site-header { padding: 22px 0 18px; }
+      .brand-row { align-items: flex-end; gap: 14px; }
+      .brand-logo { width: min(235px, 64vw); }
+      .camp-label { max-width: 95px; font-size: 0.62rem; line-height: 1.45; }
+      .hero { padding: 46px 0 36px; }
+      h1 { font-size: clamp(2.8rem, 13.3vw, 4.15rem); line-height: 0.88; }
+      .hero-note { padding: 14px 0 0 16px; }
+      .progress-inner { grid-template-columns: 1fr auto; gap: 9px 14px; min-height: 66px; padding: 11px 0; }
+      .progress-track { grid-column: 1 / -1; grid-row: 2; }
+      main { padding: 24px 0 52px; }
+      form { gap: 12px; }
+      .form-section { display: block; }
+      .section-index { padding: 15px 20px 12px; border-right: 0; border-bottom: 1px solid var(--line); font-size: 1.25rem; letter-spacing: 0.06em; }
+      .section-index::before { content: "SECȚIUNEA "; color: var(--muted); font-size: 0.65rem; letter-spacing: 0.13em; vertical-align: middle; }
+      .section-content { padding: 24px 17px 28px; }
+      .section-head { display: block; margin-bottom: 22px; }
+      .section-hint { margin-top: 7px; text-align: left; }
+      .fields { grid-template-columns: 1fr; gap: 21px; }
+      .question.full { grid-column: auto; }
+      .choices { gap: 7px; }
+      .choice span { padding: 10px 12px; font-size: 0.84rem; }
+      .weakness-grid { grid-template-columns: 1fr; }
+      .ratings-intro { grid-template-columns: 1fr; gap: 4px; }
+      .rating-row { padding: 14px 11px; }
+      .score-options { gap: 3px; }
+      .score-choice span { min-height: 36px; font-size: 0.7rem; }
+      .action-panel { grid-template-columns: 1fr; gap: 22px; padding: 28px 20px; }
+      .button-stack { min-width: 0; width: 100%; }
+      .site-footer { display: block; }
+      .site-footer p + p { margin-top: 14px; }
+      .toast { right: 11px; bottom: 11px; max-width: calc(100vw - 22px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#questionnaire">Sari la chestionar</a>
+
+  <header class="site-header">
+    <div class="page-shell brand-row">
+      <img class="brand-logo" src="assets/eden-logo.webp" width="410" height="168" alt="EDEN Jiu Jitsu">
+      <p class="camp-label">Competition Camp<br>Game Plan</p>
+    </div>
+  </header>
+
+  <div class="page-shell hero">
+    <div>
+      <p class="eyebrow">Pregătire pentru competiție</p>
+      <h1>Construiește-ți<br><span>game plan-ul.</span></h1>
+    </div>
+    <p class="hero-note">
+      <strong>4 săptămâni · vineri 19:00</strong>
+      Completează chestionarul înainte de camp. Răspunsurile tale se salvează automat pe acest dispozitiv.
+    </p>
+  </div>
+
+  <div class="progress-dock" aria-label="Progres chestionar">
+    <div class="page-shell progress-inner">
+      <p class="progress-title">Progres chestionar</p>
+      <div class="progress-track" role="progressbar" aria-label="Progres completare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-fill"></div>
+      </div>
+      <p class="progress-count">0% completat</p>
+      <p class="autosave-status" role="status" aria-live="polite">Formular pregătit.</p>
+    </div>
+  </div>
+
+  <main id="questionnaire" class="page-shell">
+    <form id="camp-form" novalidate autocomplete="on">
+      <section class="form-section" aria-labelledby="section-1-title">
+        <div class="section-index" aria-hidden="true">01</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-1-title">Date sportiv</h2>
+            <p class="section-hint">Date de bază pentru încadrare</p>
+          </div>
+          <div class="fields">
+            <div class="question" data-progress>
+              <label class="field-label" for="full-name">Nume și prenume</label>
+              <input id="full-name" name="full_name" type="text" autocomplete="name" placeholder="Numele complet">
+            </div>
+
+            <fieldset class="question" data-progress>
+              <legend>Centură / nivel</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="belt" value="Albă" data-label="Albă"><span>Albă</span></label>
+                <label class="choice"><input type="radio" name="belt" value="Albastră" data-label="Albastră"><span>Albastră</span></label>
+                <label class="choice"><input type="radio" name="belt" value="Mov" data-label="Mov"><span>Mov</span></label>
+                <label class="choice"><input type="radio" name="belt" value="Maro" data-label="Maro"><span>Maro</span></label>
+                <label class="choice"><input type="radio" name="belt" value="Neagră" data-label="Neagră"><span>Neagră</span></label>
+                <label class="choice"><input type="radio" name="belt" value="Altul" data-label="Altul" data-other-target="belt-other-wrap"><span>Altul</span></label>
+              </div>
+              <div id="belt-other-wrap" class="other-wrap" hidden>
+                <label class="field-label" for="belt-other">Alt nivel</label>
+                <input id="belt-other" name="belt_other" type="text" placeholder="Scrie nivelul">
+              </div>
+            </fieldset>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="age">Vârstă</label>
+              <div class="inline-unit">
+                <input id="age" name="age" type="number" inputmode="numeric" min="5" max="99" placeholder="Ex: 28">
+                <span>ani</span>
+              </div>
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="current-weight">Greutate actuală</label>
+              <div class="inline-unit">
+                <input id="current-weight" name="current_weight" type="number" inputmode="decimal" min="20" max="250" step="0.1" placeholder="Ex: 82.5">
+                <span>kg</span>
+              </div>
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="estimated-category">Categorie estimată</label>
+              <input id="estimated-category" name="estimated_category" type="text" placeholder="Categoria vizată">
+            </div>
+
+            <fieldset class="question" data-progress>
+              <legend>Competiție vizată</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="competition" value="Transilvania Open" data-label="Transilvania Open"><span>Transilvania Open</span></label>
+                <label class="choice"><input type="radio" name="competition" value="Altă competiție" data-label="Altă competiție" data-other-target="competition-other-wrap"><span>Altă competiție</span></label>
+              </div>
+              <div id="competition-other-wrap" class="other-wrap" hidden>
+                <label class="field-label" for="competition-other">Numele competiției</label>
+                <input id="competition-other" name="competition_other" type="text" placeholder="Scrie competiția">
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-2-title">
+        <div class="section-index" aria-hidden="true">02</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-2-title">Obiectiv pentru camp</h2>
+            <p class="section-hint">Ce vrei să obții în 4 săptămâni</p>
+          </div>
+          <div class="fields">
+            <fieldset class="question full" data-progress>
+              <legend>Obiectiv principal</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="main_goal" value="Participare competiție" data-label="Participare competiție"><span>Participare competiție</span></label>
+                <label class="choice"><input type="radio" name="main_goal" value="Îmbunătățire strategie" data-label="Îmbunătățire strategie"><span>Îmbunătățire strategie</span></label>
+                <label class="choice"><input type="radio" name="main_goal" value="Sparring competițional" data-label="Sparring competițional"><span>Sparring competițional</span></label>
+                <label class="choice"><input type="radio" name="main_goal" value="Altul" data-label="Altul" data-other-target="goal-other-wrap"><span>Altul</span></label>
+              </div>
+              <div id="goal-other-wrap" class="other-wrap" hidden>
+                <label class="field-label" for="goal-other">Alt obiectiv</label>
+                <input id="goal-other" name="main_goal_other" type="text" placeholder="Scrie obiectivul">
+              </div>
+            </fieldset>
+
+            <div class="question full" data-progress>
+              <label class="field-label" for="personal-goal">Obiectiv personal pentru următoarele 4 săptămâni</label>
+              <textarea id="personal-goal" name="personal_goal" placeholder="Descrie concret ce vrei să îmbunătățești"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-3-title">
+        <div class="section-index" aria-hidden="true">03</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-3-title">Profil de joc</h2>
+            <p class="section-hint">Pozițiile și atacurile tale naturale</p>
+          </div>
+          <div class="fields">
+            <fieldset class="question full" data-progress>
+              <legend>Preferință generală</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="game_preference" value="Top game" data-label="Top game"><span>Top game</span></label>
+                <label class="choice"><input type="radio" name="game_preference" value="Bottom game" data-label="Bottom game"><span>Bottom game</span></label>
+                <label class="choice"><input type="radio" name="game_preference" value="Ambele" data-label="Ambele"><span>Ambele</span></label>
+                <label class="choice"><input type="radio" name="game_preference" value="Nu știu încă" data-label="Nu știu încă"><span>Nu știu încă</span></label>
+              </div>
+            </fieldset>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="preferred-position">Poziție preferată</label>
+              <input id="preferred-position" name="preferred_position" type="text" placeholder="Scrie poziția">
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="preferred-guard">Gardă preferată</label>
+              <input id="preferred-guard" name="preferred_guard" type="text" placeholder="Scrie garda">
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="preferred-pass">Trecere preferată</label>
+              <input id="preferred-pass" name="preferred_pass" type="text" placeholder="Scrie trecerea">
+            </div>
+
+            <fieldset class="question" data-progress>
+              <legend>Poziție de control preferată</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="control_position" value="Side control" data-label="Side control"><span>Side control</span></label>
+                <label class="choice"><input type="radio" name="control_position" value="Mount" data-label="Mount"><span>Mount</span></label>
+                <label class="choice"><input type="radio" name="control_position" value="Back" data-label="Back"><span>Back</span></label>
+                <label class="choice"><input type="radio" name="control_position" value="Knee on belly" data-label="Knee on belly"><span>Knee on belly</span></label>
+                <label class="choice"><input type="radio" name="control_position" value="Alta" data-label="Alta" data-other-target="control-other-wrap"><span>Alta</span></label>
+              </div>
+              <div id="control-other-wrap" class="other-wrap" hidden>
+                <label class="field-label" for="control-other">Altă poziție</label>
+                <input id="control-other" name="control_position_other" type="text" placeholder="Scrie poziția">
+              </div>
+            </fieldset>
+
+            <div class="question full" data-progress>
+              <label class="field-label" for="preferred-finish">Finalizare preferată</label>
+              <input id="preferred-finish" name="preferred_finish" type="text" placeholder="Scrie finalizarea">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-4-title">
+        <div class="section-index" aria-hidden="true">04</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-4-title">Picioare / intrări / sweep-uri</h2>
+            <p class="section-hint">Cum creezi prima oportunitate</p>
+          </div>
+          <div class="fields">
+            <div class="question" data-progress>
+              <label class="field-label" for="preferred-takedown">Takedown preferat</label>
+              <input id="preferred-takedown" name="preferred_takedown" type="text" placeholder="Scrie takedown-ul">
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="preferred-clinch">Intrare în clinch preferată</label>
+              <input id="preferred-clinch" name="preferred_clinch" type="text" placeholder="Scrie intrarea">
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="preferred-sweep">Sweep preferat</label>
+              <input id="preferred-sweep" name="preferred_sweep" type="text" placeholder="Scrie sweep-ul">
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="reach-good-position">Cum ajungi de obicei în poziția ta bună?</label>
+              <textarea id="reach-good-position" name="reach_good_position" placeholder="Descrie traseul obișnuit"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-5-title">
+        <div class="section-index" aria-hidden="true">05</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-5-title">Game plan</h2>
+            <p class="section-hint">Traseul tău ideal prin meci</p>
+          </div>
+          <div class="fields">
+            <fieldset class="question full" data-progress>
+              <legend>Ai deja un game plan?</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="has_game_plan" value="Da" data-label="Da"><span>Da</span></label>
+                <label class="choice"><input type="radio" name="has_game_plan" value="Parțial" data-label="Parțial"><span>Parțial</span></label>
+                <label class="choice"><input type="radio" name="has_game_plan" value="Nu, vreau să îl construim" data-label="Nu, vreau să îl construim"><span>Nu, vreau să îl construim</span></label>
+              </div>
+            </fieldset>
+
+            <div class="question full" data-progress>
+              <label class="field-label" for="first-30">Începutul meciului: ce vrei să faci în primele 30 de secunde?</label>
+              <textarea id="first-30" name="first_30_seconds" placeholder="Descrie acțiunea de start"></textarea>
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="if-top">Dacă ajungi sus, ce urmărești?</label>
+              <textarea id="if-top" name="if_top" placeholder="Obiectivul din top game"></textarea>
+            </div>
+
+            <div class="question" data-progress>
+              <label class="field-label" for="if-bottom">Dacă ajungi jos, ce urmărești?</label>
+              <textarea id="if-bottom" name="if_bottom" placeholder="Obiectivul din bottom game"></textarea>
+            </div>
+
+            <div class="question full" data-progress>
+              <label class="field-label" for="ideal-route">Care este traseul ideal: <span class="route-arrow">takedown / sweep → pass → control → finalizare?</span></label>
+              <textarea id="ideal-route" name="ideal_route" placeholder="Descrie traseul, pas cu pas"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-6-title">
+        <div class="section-index" aria-hidden="true">06</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-6-title">Puncte slabe și istoric competițional</h2>
+            <p class="section-hint">Unde se rupe de obicei planul</p>
+          </div>
+          <div class="fields">
+            <div class="question full" data-progress>
+              <p class="question-title">Care sunt cele mai mari 3 puncte slabe ale tale?</p>
+              <div class="weakness-grid">
+                <label class="mini-field"><span>01</span><input name="weakness_1" type="text" aria-label="Primul punct slab" placeholder="Primul punct slab"></label>
+                <label class="mini-field"><span>02</span><input name="weakness_2" type="text" aria-label="Al doilea punct slab" placeholder="Al doilea punct slab"></label>
+                <label class="mini-field"><span>03</span><input name="weakness_3" type="text" aria-label="Al treilea punct slab" placeholder="Al treilea punct slab"></label>
+              </div>
+            </div>
+
+            <fieldset class="question full" data-progress>
+              <legend>Cum ai pierdut în competiții sau în sparringuri importante? <span class="optional">Poți selecta mai multe</span></legend>
+              <div class="choices">
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Takedown" data-label="Takedown"><span>Takedown</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Sweep" data-label="Sweep"><span>Sweep</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Pass" data-label="Pass"><span>Pass</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Mount" data-label="Mount"><span>Mount</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Back take" data-label="Back take"><span>Back take</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Finalizare" data-label="Finalizare"><span>Finalizare</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Penalizare" data-label="Penalizare"><span>Penalizare</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Oboseală" data-label="Oboseală"><span>Oboseală</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Mindset" data-label="Mindset"><span>Mindset</span></label>
+                <label class="choice"><input type="checkbox" name="loss_reasons" value="Altul" data-label="Altul" data-other-target="loss-other-wrap"><span>Altul</span></label>
+              </div>
+              <div id="loss-other-wrap" class="other-wrap" hidden>
+                <label class="field-label" for="loss-other">Alt motiv</label>
+                <input id="loss-other" name="loss_reason_other" type="text" placeholder="Scrie motivul">
+              </div>
+            </fieldset>
+
+            <div class="question full" data-progress>
+              <label class="field-label" for="loss-explanation">Explică ce s-a întâmplat</label>
+              <textarea id="loss-explanation" name="loss_explanation" placeholder="Descrie situația și ce ai observat"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-7-title">
+        <div class="section-index" aria-hidden="true">07</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-7-title">Autoevaluare 1–10</h2>
+            <p class="section-hint">Alege nota și adaugă o observație</p>
+          </div>
+          <div class="ratings-intro">
+            <span><strong>1</strong> = are nevoie de mult lucru</span>
+            <span><strong>10</strong> = punct foarte solid</span>
+          </div>
+          <div id="rating-list" class="rating-list"></div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="section-8-title">
+        <div class="section-index" aria-hidden="true">08</div>
+        <div class="section-content">
+          <div class="section-head">
+            <h2 id="section-8-title">Notițe finale</h2>
+            <p class="section-hint">Orice detaliu important pentru antrenor</p>
+          </div>
+          <div class="fields">
+            <div class="question full" data-progress>
+              <label class="field-label" for="final-notes">Notițe</label>
+              <textarea id="final-notes" name="final_notes" rows="7" placeholder="Adaugă aici orice informație relevantă"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="action-panel" aria-labelledby="download-title">
+        <div>
+          <h2 id="download-title">Chestionarul tău este gata.</h2>
+          <p>Descarcă răspunsurile într-un PDF EDEN, pregătit pentru a fi trimis antrenorului. Formularul rămâne salvat doar în browserul acestui dispozitiv.</p>
+        </div>
+        <div class="button-stack">
+          <button id="download-pdf" class="primary-button" type="button">
+            <svg class="download-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"></path></svg>
+            <span>Descarcă PDF</span>
+          </button>
+          <button id="reset-form" class="secondary-button" type="button">Șterge răspunsurile</button>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <footer class="site-footer page-shell">
+    <p><strong>EDEN Jiu Jitsu</strong><br>Competition Camp · Game Plan</p>
+    <p>Datele nu sunt trimise online. Ele rămân pe dispozitiv și sunt incluse doar în PDF-ul generat.</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="pdf-root" aria-hidden="true"></div>
+
+  <script src="assets/html2pdf.bundle.min.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const STORAGE_KEY = 'eden-comp-questionnaire-v1';
+      const form = document.getElementById('camp-form');
+      const ratingList = document.getElementById('rating-list');
+      const progressTrack = document.querySelector('.progress-track');
+      const progressFill = document.querySelector('.progress-fill');
+      const progressCount = document.querySelector('.progress-count');
+      const autosaveStatus = document.querySelector('.autosave-status');
+      const downloadButton = document.getElementById('download-pdf');
+      const resetButton = document.getElementById('reset-form');
+      const toast = document.getElementById('toast');
+      const pdfRoot = document.getElementById('pdf-root');
+      let saveTimer = null;
+      let toastTimer = null;
+
+      const ratings = [
+        ['strength', 'Forță'],
+        ['conditioning', 'Condiție fizică'],
+        ['explosion', 'Explozie'],
+        ['speed', 'Viteză'],
+        ['mobility', 'Flexibilitate / mobilitate'],
+        ['pressure_resistance', 'Rezistență la presiune'],
+        ['mental_strength', 'Forță psihică'],
+        ['emotional_control', 'Control emoțional'],
+        ['defensive_technique', 'Tehnică defensivă'],
+        ['offensive_technique', 'Tehnică ofensivă'],
+        ['wrestling', 'Wrestling / stand-up'],
+        ['guard', 'Gardă'],
+        ['passing', 'Passing'],
+        ['submissions', 'Finalizări'],
+        ['scoring', 'Înțelegere punctaj'],
+        ['strategy', 'Game plan / strategie'],
+        ['weight_management', 'Management greutate / categorie']
+      ];
+
+      const escapeHTML = (value) => String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+
+      function renderRatings() {
+        const rows = ratings.map(([key, label]) => {
+          const options = Array.from({ length: 10 }, (_, index) => {
+            const score = index + 1;
+            return `<label class="score-choice"><input type="radio" name="rating_${key}" value="${score}" aria-label="${escapeHTML(label)}, nota ${score}"><span>${score}</span></label>`;
+          }).join('');
+          return `
+            <div class="rating-row question" data-progress data-rating-key="${key}">
+              <p class="rating-name">${escapeHTML(label)}</p>
+              <div class="score-options" role="radiogroup" aria-label="${escapeHTML(label)}, notă de la 1 la 10">${options}</div>
+              <input class="rating-note" name="rating_${key}_note" type="text" aria-label="Observații pentru ${escapeHTML(label)}" placeholder="Observații, opțional">
+            </div>`;
+        }).join('');
+        // Safe template: labels and keys come only from the static ratings array above.
+        ratingList.innerHTML = rows;
+      }
+
+      function getFormState() {
+        const state = {};
+        Array.from(form.elements).forEach((field) => {
+          if (!field.name) return;
+          if (field.type === 'checkbox') {
+            if (!Array.isArray(state[field.name])) state[field.name] = [];
+            if (field.checked) state[field.name].push(field.value);
+          } else if (field.type === 'radio') {
+            if (field.checked) state[field.name] = field.value;
+            else if (!(field.name in state)) state[field.name] = '';
+          } else {
+            state[field.name] = field.value;
+          }
+        });
+        return state;
+      }
+
+      function applyFormState(state) {
+        if (!state || typeof state !== 'object') return;
+        Array.from(form.elements).forEach((field) => {
+          if (!field.name || !(field.name in state)) return;
+          if (field.type === 'checkbox') {
+            field.checked = Array.isArray(state[field.name]) && state[field.name].includes(field.value);
+          } else if (field.type === 'radio') {
+            field.checked = state[field.name] === field.value;
+          } else {
+            field.value = state[field.name] ?? '';
+          }
+        });
+      }
+
+      function saveForm() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormState()));
+          autosaveStatus.textContent = 'Răspunsurile au fost salvate automat pe acest dispozitiv.';
+        } catch (error) {
+          autosaveStatus.textContent = 'Salvarea automată nu este disponibilă în acest browser.';
+        }
+      }
+
+      function scheduleSave() {
+        clearTimeout(saveTimer);
+        autosaveStatus.textContent = 'Se salvează răspunsurile.';
+        saveTimer = setTimeout(saveForm, 180);
+      }
+
+      function loadForm() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) applyFormState(JSON.parse(saved));
+        } catch (error) {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      }
+
+      function syncOtherFields() {
+        document.querySelectorAll('[data-other-target]').forEach((control) => {
+          const target = document.getElementById(control.dataset.otherTarget);
+          if (!target) return;
+          const shouldShow = control.checked;
+          target.hidden = !shouldShow;
+          const input = target.querySelector('input, textarea');
+          if (input) input.disabled = !shouldShow;
+        });
+      }
+
+      function questionIsAnswered(question) {
+        const meaningful = Array.from(question.querySelectorAll('input, textarea, select')).filter((field) => {
+          if (field.disabled) return false;
+          if (field.classList.contains('rating-note')) return false;
+          return true;
+        });
+        return meaningful.some((field) => {
+          if (field.type === 'radio' || field.type === 'checkbox') return field.checked;
+          return String(field.value || '').trim().length > 0;
+        });
+      }
+
+      function updateProgress() {
+        const questions = Array.from(document.querySelectorAll('.question[data-progress]'));
+        const answered = questions.filter(questionIsAnswered).length;
+        const percent = questions.length ? Math.round((answered / questions.length) * 100) : 0;
+        progressFill.style.width = `${percent}%`;
+        progressCount.textContent = `${percent}% completat`;
+        progressTrack.setAttribute('aria-valuenow', String(percent));
+      }
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 3600);
+      }
+
+      function getValue(name) {
+        const fields = Array.from(form.querySelectorAll(`[name="${CSS.escape(name)}"]`));
+        if (!fields.length) return '';
+        const first = fields[0];
+        if (first.type === 'radio') {
+          const checked = fields.find((field) => field.checked);
+          return checked ? (checked.dataset.label || checked.value) : '';
+        }
+        if (first.type === 'checkbox') {
+          return fields.filter((field) => field.checked).map((field) => field.dataset.label || field.value).join(', ');
+        }
+        return String(first.value || '').trim();
+      }
+
+      function withOther(baseName, otherName, triggerLabel) {
+        const base = getValue(baseName);
+        const other = getValue(otherName);
+        if (!other) return base;
+        const values = base ? base.split(', ') : [];
+        return values.map((value) => value === triggerLabel ? other : value).join(', ');
+      }
+
+      function pdfAnswer(label, value, full = false) {
+        const clean = String(value || '').trim();
+        return `
+          <div class="pdf-answer${full ? ' full' : ''}">
+            <p class="pdf-answer-label">${escapeHTML(label)}</p>
+            <p class="pdf-answer-value${clean ? '' : ' empty'}">${clean ? escapeHTML(clean) : 'Necompletat'}</p>
+          </div>`;
+      }
+
+      function pdfSection(number, title, items, allowBreak = false) {
+        return `
+          <section class="pdf-section${allowBreak ? ' allow-break' : ''}">
+            <h2 class="pdf-section-title"><span>${number}</span>${escapeHTML(title)}</h2>
+            <div class="pdf-grid">${items.join('')}</div>
+          </section>`;
+      }
+
+      function buildPdfDocument() {
+        const name = getValue('full_name');
+        const generated = new Intl.DateTimeFormat('ro-RO', { dateStyle: 'long', timeStyle: 'short' }).format(new Date());
+        const weaknesses = [getValue('weakness_1'), getValue('weakness_2'), getValue('weakness_3')]
+          .filter(Boolean)
+          .map((item, index) => `${index + 1}. ${item}`)
+          .join('\n');
+        const lossReasons = withOther('loss_reasons', 'loss_reason_other', 'Altul');
+
+        const section1 = pdfSection('01', 'Date sportiv', [
+          pdfAnswer('Nume și prenume', name),
+          pdfAnswer('Centură / nivel', withOther('belt', 'belt_other', 'Altul')),
+          pdfAnswer('Vârstă', getValue('age') ? `${getValue('age')} ani` : ''),
+          pdfAnswer('Greutate actuală', getValue('current_weight') ? `${getValue('current_weight')} kg` : ''),
+          pdfAnswer('Categorie estimată', getValue('estimated_category')),
+          pdfAnswer('Competiție vizată', withOther('competition', 'competition_other', 'Altă competiție'))
+        ]);
+
+        const section2 = pdfSection('02', 'Obiectiv pentru camp', [
+          pdfAnswer('Obiectiv principal', withOther('main_goal', 'main_goal_other', 'Altul'), true),
+          pdfAnswer('Obiectiv personal pentru următoarele 4 săptămâni', getValue('personal_goal'), true)
+        ]);
+
+        const section3 = pdfSection('03', 'Profil de joc', [
+          pdfAnswer('Preferință generală', getValue('game_preference')),
+          pdfAnswer('Poziție preferată', getValue('preferred_position')),
+          pdfAnswer('Gardă preferată', getValue('preferred_guard')),
+          pdfAnswer('Trecere preferată', getValue('preferred_pass')),
+          pdfAnswer('Poziție de control preferată', withOther('control_position', 'control_position_other', 'Alta')),
+          pdfAnswer('Finalizare preferată', getValue('preferred_finish'))
+        ]);
+
+        const section4 = pdfSection('04', 'Picioare / intrări / sweep-uri', [
+          pdfAnswer('Takedown preferat', getValue('preferred_takedown')),
+          pdfAnswer('Intrare în clinch preferată', getValue('preferred_clinch')),
+          pdfAnswer('Sweep preferat', getValue('preferred_sweep')),
+          pdfAnswer('Cum ajungi de obicei în poziția ta bună?', getValue('reach_good_position'))
+        ]);
+
+        const section5 = pdfSection('05', 'Game plan', [
+          pdfAnswer('Ai deja un game plan?', getValue('has_game_plan'), true),
+          pdfAnswer('Primele 30 de secunde', getValue('first_30_seconds'), true),
+          pdfAnswer('Dacă ajungi sus', getValue('if_top')),
+          pdfAnswer('Dacă ajungi jos', getValue('if_bottom')),
+          pdfAnswer('Traseul ideal: takedown / sweep → pass → control → finalizare', getValue('ideal_route'), true)
+        ]);
+
+        const section6 = pdfSection('06', 'Puncte slabe și istoric competițional', [
+          pdfAnswer('Cele mai mari 3 puncte slabe', weaknesses, true),
+          pdfAnswer('Cum ai pierdut', lossReasons, true),
+          pdfAnswer('Explicație', getValue('loss_explanation'), true)
+        ]);
+
+        const ratingRows = ratings.map(([key, label]) => {
+          const score = getValue(`rating_${key}`);
+          const note = getValue(`rating_${key}_note`);
+          return `<tr><td>${escapeHTML(label)}</td><td>${score ? `${escapeHTML(score)} / 10` : '-'}</td><td>${note ? escapeHTML(note) : '-'}</td></tr>`;
+        });
+
+        const ratingTable = (rows) => `
+          <table class="pdf-rating-table">
+            <thead><tr><th>Aspect</th><th>Notă</th><th>Observații</th></tr></thead>
+            <tbody>${rows.join('')}</tbody>
+          </table>`;
+
+        const section7 = `
+          <section class="pdf-section allow-break">
+            <h2 class="pdf-section-title"><span>07</span>Autoevaluare 1–10</h2>
+            ${ratingTable(ratingRows.slice(0, 8))}
+            <div class="html2pdf__page-break"></div>
+            <h3 class="pdf-rating-continuation">07 · Autoevaluare 1–10 · continuare</h3>
+            ${ratingTable(ratingRows.slice(8))}
+          </section>`;
+
+        const section8 = pdfSection('08', 'Notițe finale', [
+          pdfAnswer('Notițe', getValue('final_notes'), true)
+        ]);
+
+        // User-entered values are escaped before this printable template is created.
+        pdfRoot.innerHTML = `
+          <article class="pdf-document">
+            <header class="pdf-header">
+              <img src="assets/eden-logo.webp" width="410" height="168" alt="EDEN Jiu Jitsu">
+              <div>
+                <h1>Competition Camp<br><span>Chestionar Game Plan</span></h1>
+                <p>4 săptămâni · vineri 19:00 · pregătire pentru competiție</p>
+              </div>
+            </header>
+            <div class="pdf-meta">
+              <span><strong>Sportiv:</strong> ${escapeHTML(name || 'Necompletat')}</span>
+              <span><strong>Generat:</strong> ${escapeHTML(generated)}</span>
+            </div>
+            <div class="pdf-body">${section1}${section2}${section3}${section4}${section5}${section6}${section7}${section8}</div>
+            <footer class="pdf-footer">EDEN Jiu Jitsu · Competition Camp · Chestionar pentru game plan</footer>
+          </article>`;
+      }
+
+      async function waitForPdfAssets() {
+        if (document.fonts && document.fonts.ready) await document.fonts.ready;
+        const images = Array.from(pdfRoot.querySelectorAll('img'));
+        await Promise.all(images.map((image) => {
+          if (image.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            image.addEventListener('load', resolve, { once: true });
+            image.addEventListener('error', resolve, { once: true });
+          });
+        }));
+      }
+
+      function safeFilename(value) {
+        const clean = String(value || 'Chestionar')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 60);
+        return clean || 'Chestionar';
+      }
+
+      async function downloadPdf() {
+        if (typeof window.html2pdf !== 'function') {
+          showToast('Generatorul PDF nu s-a încărcat. Reîncarcă pagina și încearcă din nou.');
+          return;
+        }
+
+        const buttonLabel = downloadButton.querySelector('span');
+        const icon = downloadButton.querySelector('svg');
+        downloadButton.disabled = true;
+        icon.hidden = true;
+        const spinner = document.createElement('i');
+        spinner.className = 'button-spinner';
+        spinner.setAttribute('aria-hidden', 'true');
+        downloadButton.prepend(spinner);
+        buttonLabel.textContent = 'Se generează PDF-ul';
+        autosaveStatus.textContent = 'Se generează PDF-ul.';
+
+        try {
+          saveForm();
+          buildPdfDocument();
+          await waitForPdfAssets();
+          const athlete = safeFilename(getValue('full_name'));
+          const options = {
+            margin: [8, 7, 8, 7],
+            filename: `EDEN-Competition-Camp-${athlete}.pdf`,
+            image: { type: 'jpeg', quality: 0.96 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: '#ffffff',
+              logging: false,
+              scrollX: 0,
+              scrollY: 0
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.pdf-answer', '.pdf-section-title', 'tr'] }
+          };
+          const printableDocument = pdfRoot.querySelector('.pdf-document');
+          if (!printableDocument) throw new Error('Printable document was not created.');
+          const pdfBlob = await window.html2pdf().set(options).from(printableDocument).outputPdf('blob');
+          if (!(pdfBlob instanceof Blob) || pdfBlob.type !== 'application/pdf' || pdfBlob.size < 10000) {
+            throw new Error('Generated PDF did not pass the file validation check.');
+          }
+
+          const downloadUrl = URL.createObjectURL(pdfBlob);
+          const downloadLink = document.createElement('a');
+          downloadLink.href = downloadUrl;
+          downloadLink.download = options.filename;
+          downloadLink.hidden = true;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          downloadLink.remove();
+          setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
+          showToast('PDF-ul a fost descărcat.');
+          autosaveStatus.textContent = 'PDF descărcat cu succes.';
+        } catch (error) {
+          console.error('PDF generation failed:', error);
+          showToast('PDF-ul nu a putut fi generat. Reîncarcă pagina și încearcă din nou.');
+          autosaveStatus.textContent = 'PDF-ul nu a putut fi generat.';
+        } finally {
+          spinner.remove();
+          icon.hidden = false;
+          buttonLabel.textContent = 'Descarcă PDF';
+          downloadButton.disabled = false;
+          pdfRoot.innerHTML = '';
+        }
+      }
+
+      function resetForm() {
+        const confirmed = window.confirm('Ștergi toate răspunsurile salvate pe acest dispozitiv?');
+        if (!confirmed) return;
+        form.reset();
+        localStorage.removeItem(STORAGE_KEY);
+        syncOtherFields();
+        updateProgress();
+        autosaveStatus.textContent = 'Toate răspunsurile au fost șterse.';
+        showToast('Răspunsurile au fost șterse.');
+        document.getElementById('questionnaire').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      renderRatings();
+      loadForm();
+      syncOtherFields();
+      updateProgress();
+
+      form.addEventListener('input', () => {
+        syncOtherFields();
+        updateProgress();
+        scheduleSave();
+      });
+
+      form.addEventListener('change', (event) => {
+        const targetId = event.target.dataset ? event.target.dataset.otherTarget : null;
+        syncOtherFields();
+        updateProgress();
+        scheduleSave();
+        if (targetId && event.target.checked) {
+          const target = document.getElementById(targetId);
+          const field = target ? target.querySelector('input, textarea') : null;
+          if (field) requestAnimationFrame(() => field.focus());
+        }
+      });
+
+      downloadButton.addEventListener('click', downloadPdf);
+      resetButton.addEventListener('click', resetForm);
+    })();
+  </script>
+</body>
+</html>
