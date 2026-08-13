@@ -814,32 +814,11 @@
     .pdf-dialog-actions { display: grid; gap: 9px; }
     .pdf-dialog-actions [hidden] { display: none !important; }
 
-    .pdf-dialog-actions .primary-button,
-    .pdf-direct-download {
+    .pdf-dialog-actions .primary-button {
       width: 100%;
       min-height: 52px;
       text-decoration: none;
     }
-
-    .pdf-direct-download {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 11px 16px;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid var(--line-strong);
-      border-radius: 9px;
-      font-family: var(--display);
-      font-size: 0.82rem;
-      font-weight: 900;
-      letter-spacing: 0.07em;
-      text-align: center;
-      text-transform: uppercase;
-    }
-
-    .pdf-direct-download:hover { background: rgba(255, 255, 255, 0.11); }
-    .pdf-direct-download.is-primary { color: var(--ink); background: #090b08; border-color: #090b08; }
 
     .pdf-save-hint {
       margin: 13px 0 0;
@@ -1511,7 +1490,7 @@
       <button id="pdf-dialog-close" class="pdf-dialog-close" type="button" aria-label="Închide">×</button>
       <div class="pdf-ready-mark" aria-hidden="true">✓</div>
       <h2 id="pdf-ready-title">PDF-ul este gata.</h2>
-      <p id="pdf-ready-description" class="pdf-ready-copy">Alege mai jos cum vrei să salvezi chestionarul.</p>
+      <p id="pdf-ready-description" class="pdf-ready-copy">Apasă mai jos pentru a descărca sau trimite chestionarul.</p>
       <div class="pdf-file-card" aria-live="polite">
         <span class="pdf-file-badge" aria-hidden="true">PDF</span>
         <span>
@@ -1520,8 +1499,7 @@
         </span>
       </div>
       <div class="pdf-dialog-actions">
-        <button id="save-share-pdf" class="primary-button" type="button">Salvează / trimite PDF</button>
-        <a id="direct-download-pdf" class="pdf-direct-download" href="#" download>Descarcă direct</a>
+        <button id="save-share-pdf" class="primary-button" type="button">Descarcă / trimite PDF</button>
       </div>
       <p id="pdf-save-hint" class="pdf-save-hint">Pe telefon se va deschide meniul de salvare sau trimitere. Alege opțiunea de salvare în fișiere.</p>
     </div>
@@ -1549,7 +1527,6 @@
       const pdfReadyDialog = document.getElementById('pdf-ready-dialog');
       const pdfDialogClose = document.getElementById('pdf-dialog-close');
       const saveSharePdfButton = document.getElementById('save-share-pdf');
-      const directDownloadPdf = document.getElementById('direct-download-pdf');
       const pdfFileName = document.getElementById('pdf-file-name');
       const pdfFileSize = document.getElementById('pdf-file-size');
       const pdfSaveHint = document.getElementById('pdf-save-hint');
@@ -1970,8 +1947,6 @@
         if (preparedPdfUrl) URL.revokeObjectURL(preparedPdfUrl);
         preparedPdf = null;
         preparedPdfUrl = '';
-        directDownloadPdf.removeAttribute('href');
-        directDownloadPdf.removeAttribute('download');
       }
 
       function canSharePreparedFile(file) {
@@ -2000,17 +1975,13 @@
 
         pdfFileName.textContent = filename;
         pdfFileSize.textContent = formatFileSize(pdfBlob.size);
-        directDownloadPdf.href = preparedPdfUrl;
-        directDownloadPdf.download = filename;
-        directDownloadPdf.classList.toggle('is-primary', !canShare && !canPickFile);
-
-        saveSharePdfButton.hidden = !canShare && !canPickFile;
-        saveSharePdfButton.textContent = canShare ? 'Salvează / trimite PDF' : 'Salvează PDF';
+        saveSharePdfButton.hidden = false;
+        saveSharePdfButton.textContent = 'Descarcă / trimite PDF';
         pdfSaveHint.textContent = canShare
           ? 'Pe telefon se va deschide meniul de salvare sau trimitere. Alege opțiunea de salvare în fișiere.'
           : canPickFile
             ? 'Alege folderul în care vrei să salvezi PDF-ul.'
-            : 'Apasă „Descarcă direct”. Fișierul va fi salvat în folderul de descărcări al browserului.';
+            : 'PDF-ul va fi descărcat în folderul de descărcări al browserului.';
 
         if (pdfReadyDialog.open) pdfReadyDialog.close();
         if (typeof pdfReadyDialog.showModal === 'function') pdfReadyDialog.showModal();
@@ -2044,11 +2015,22 @@
             await writable.close();
             autosaveStatus.textContent = 'PDF salvat cu succes.';
             showToast('PDF-ul a fost salvat.');
+            return;
           }
+
+          const downloadLink = document.createElement('a');
+          downloadLink.href = preparedPdfUrl;
+          downloadLink.download = preparedPdf.filename;
+          downloadLink.hidden = true;
+          document.body.append(downloadLink);
+          downloadLink.click();
+          downloadLink.remove();
+          autosaveStatus.textContent = 'Descărcarea PDF-ului a început.';
+          showToast('Descărcarea PDF-ului a început.');
         } catch (error) {
           if (error && error.name === 'AbortError') return;
           console.error('PDF save or share failed:', error);
-          showToast('Meniul de salvare nu s-a putut deschide. Folosește „Descarcă direct”.');
+          showToast('PDF-ul nu a putut fi descărcat sau trimis. Încearcă din nou.');
         }
       }
 
@@ -2097,7 +2079,7 @@
           }
 
           showPdfReadyDialog(pdfBlob, options.filename);
-          showToast('PDF-ul este gata. Alege cum vrei să îl salvezi.');
+          showToast('PDF-ul este gata. Apasă „Descarcă / trimite PDF”.');
           autosaveStatus.textContent = 'PDF pregătit pentru salvare.';
         } catch (error) {
           console.error('PDF generation failed:', error);
@@ -2148,15 +2130,6 @@
       downloadButton.addEventListener('click', downloadPdf);
       saveSharePdfButton.addEventListener('click', saveOrSharePreparedPdf);
       pdfDialogClose.addEventListener('click', () => pdfReadyDialog.close());
-      directDownloadPdf.addEventListener('click', (event) => {
-        if (!preparedPdfUrl) {
-          event.preventDefault();
-          showToast('Generează din nou PDF-ul și încearcă iar.');
-          return;
-        }
-        autosaveStatus.textContent = 'Descărcarea PDF-ului a început.';
-        showToast('Descărcarea PDF-ului a început.');
-      });
       resetButton.addEventListener('click', resetForm);
       window.addEventListener('pagehide', () => {
         saveForm();
