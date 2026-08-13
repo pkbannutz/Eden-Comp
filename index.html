@@ -36,7 +36,7 @@
 
     body {
       margin: 0;
-      min-width: 320px;
+      min-width: 0;
       background: var(--bg);
       color: var(--ink);
       font-family: var(--body);
@@ -292,11 +292,14 @@
     }
 
     .optional {
+      display: block;
+      margin-top: 4px;
       color: var(--muted);
       font-family: var(--body);
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       font-weight: 500;
       letter-spacing: 0;
+      line-height: 1.45;
       text-transform: none;
     }
 
@@ -370,6 +373,7 @@
     .choice span {
       display: flex;
       align-items: center;
+      gap: 9px;
       min-height: 44px;
       padding: 10px 14px;
       color: var(--muted);
@@ -381,6 +385,22 @@
       line-height: 1.15;
       transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
     }
+
+    .choice span::before {
+      content: "";
+      display: grid;
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      place-items: center;
+      border: 1.5px solid currentColor;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .choice input[type="radio"] + span::before { border-radius: 50%; }
 
     .choice:hover span {
       color: var(--ink);
@@ -394,10 +414,17 @@
       border-color: var(--olive-light);
     }
 
-    .choice input:checked + span::before {
+    .choice input[type="checkbox"]:checked + span::before {
       content: "✓";
-      margin-right: 7px;
-      font-weight: 900;
+      color: var(--olive-light);
+      background: #10130c;
+      border-color: #10130c;
+    }
+
+    .choice input[type="radio"]:checked + span::before {
+      background: #10130c;
+      border-color: #10130c;
+      box-shadow: inset 0 0 0 4px var(--olive-light);
     }
 
     .other-wrap { margin-top: 12px; }
@@ -438,18 +465,38 @@
 
     .ratings-intro strong { color: var(--ink); }
 
-    .rating-list { display: grid; gap: 12px; }
+    .rating-list { display: grid; gap: 28px; }
+
+    .rating-group { min-width: 0; }
+
+    .rating-group-title {
+      margin: 0 0 10px;
+      color: var(--olive-light);
+      font-family: var(--display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .rating-group-list {
+      overflow: hidden;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
 
     .rating-row {
       display: grid;
-      grid-template-columns: minmax(145px, 0.58fr) minmax(330px, 1fr) minmax(170px, 0.72fr);
-      gap: 16px;
+      grid-template-columns: minmax(170px, 0.5fr) minmax(350px, 1fr);
+      gap: 13px 22px;
       align-items: center;
-      padding: 15px;
-      background: var(--surface-raised);
-      border: 1px solid var(--line);
-      border-radius: 11px;
+      padding: 18px;
+      background: transparent;
+      border-bottom: 1px solid var(--line);
     }
+
+    .rating-row:last-child { border-bottom: 0; }
 
     .rating-name {
       margin: 0;
@@ -499,10 +546,42 @@
       border-color: var(--olive-light);
     }
 
+    .rating-note-details {
+      grid-column: 2;
+      min-width: 0;
+    }
+
+    .rating-note-details summary {
+      width: max-content;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 650;
+      list-style: none;
+    }
+
+    .rating-note-details summary::-webkit-details-marker { display: none; }
+
+    .rating-note-details summary::before {
+      content: "+";
+      display: inline-grid;
+      width: 18px;
+      height: 18px;
+      margin-right: 7px;
+      place-items: center;
+      color: var(--olive-light);
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      line-height: 1;
+    }
+
+    .rating-note-details[open] summary::before { content: "−"; }
+
     .rating-note {
-      min-height: 40px !important;
-      padding: 9px 11px !important;
-      font-size: 0.84rem !important;
+      min-height: 72px !important;
+      margin-top: 10px;
+      padding: 10px 12px !important;
+      font-size: 0.88rem !important;
     }
 
     .action-panel {
@@ -817,43 +896,73 @@
       .form-section { grid-template-columns: 82px minmax(0, 1fr); }
       .section-index { padding: 28px 18px; font-size: 2.2rem; }
       .rating-row { grid-template-columns: 1fr; gap: 11px; }
+      .rating-note-details { grid-column: auto; }
       .rating-note { width: 100%; }
     }
 
     @media (max-width: 640px) {
       .page-shell { width: min(100% - 32px, 1080px); }
-      .site-header { padding: 22px 0 18px; }
+      .site-header { padding: 17px 0 14px; }
       .brand-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; }
-      .brand-logo { width: min(220px, 60vw); }
+      .brand-logo { width: min(200px, 58vw); }
       .camp-label { max-width: 100px; font-size: 0.62rem; line-height: 1.45; }
-      .hero { gap: 24px; padding: 42px 0 34px; }
-      h1 { font-size: clamp(2.45rem, 11.4vw, 3.6rem); line-height: 0.91; }
-      .hero-note { max-width: none; padding: 14px 0 0 16px; }
-      .progress-inner { grid-template-columns: 1fr auto; gap: 9px 14px; min-height: 66px; padding: 11px 0; }
+      .hero { gap: 20px; padding: 30px 0 27px; }
+      .eyebrow { margin-bottom: 10px; font-size: 0.74rem; }
+      h1 { font-size: clamp(2.2rem, 10.3vw, 3.2rem); line-height: 0.92; }
+      .hero-note { max-width: none; padding: 12px 0 0 15px; font-size: 0.94rem; line-height: 1.55; }
+      .hero-note strong { font-size: 1rem; }
+      .progress-inner { grid-template-columns: 1fr auto; gap: 10px 14px; min-height: 62px; padding: 10px 0; }
       .progress-track { grid-column: 1 / -1; grid-row: 2; }
-      main { padding: 24px 0 52px; }
-      form { gap: 12px; }
+      .progress-title, .progress-count { font-size: 0.72rem; }
+      main { padding: 22px 0 54px; }
+      form { gap: 18px; }
       .form-section { display: block; }
-      .section-index { padding: 15px 18px 12px; border-right: 0; border-bottom: 1px solid var(--line); font-size: 1.25rem; letter-spacing: 0.06em; }
+      .section-index { padding: 15px 20px 12px; border-right: 0; border-bottom: 1px solid var(--line); font-size: 1.25rem; letter-spacing: 0.06em; }
       .section-index::before { content: "SECȚIUNEA "; color: var(--muted); font-size: 0.65rem; letter-spacing: 0.13em; vertical-align: middle; }
-      .section-content { padding: 24px 18px 28px; }
-      .section-head { display: block; margin-bottom: 22px; }
-      .section-hint { margin-top: 7px; text-align: left; }
-      .fields { grid-template-columns: 1fr; gap: 21px; }
+      .section-content { padding: 26px 20px 32px; }
+      .section-head { display: block; margin-bottom: 27px; }
+      h2 { font-size: 1.75rem; line-height: 1.05; }
+      .section-hint { margin-top: 8px; font-size: 0.9rem; line-height: 1.5; text-align: left; }
+      .fields { grid-template-columns: 1fr; gap: 26px; }
       .question.full { grid-column: auto; }
+      .question-title, .field-label, legend { margin-bottom: 11px; font-size: 0.95rem; line-height: 1.45; }
+      input[type="text"], input[type="number"], textarea, select { min-height: 54px; padding: 14px 15px; font-size: 1rem; }
+      textarea { min-height: 104px; }
       .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-      .choice span { height: 100%; justify-content: center; padding: 11px 10px; font-size: 0.84rem; text-align: center; }
+      .choices.choice-list { grid-template-columns: 1fr; }
+      .choice span { height: 100%; justify-content: flex-start; min-height: 50px; padding: 12px; font-size: 0.91rem; line-height: 1.3; text-align: left; }
       .choice:last-child:nth-child(odd) { grid-column: 1 / -1; }
+      .choices.choice-list .choice { grid-column: auto !important; }
       .weakness-grid { grid-template-columns: 1fr; }
-      .ratings-intro { grid-template-columns: 1fr; gap: 4px; }
-      .rating-row { padding: 14px 11px; }
+      .ratings-intro { grid-template-columns: 1fr; gap: 3px; padding: 0 0 18px; margin-bottom: 22px; background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; font-size: 0.9rem; }
+      .rating-list { gap: 30px; }
+      .rating-group-title { margin-bottom: 11px; font-size: 0.83rem; }
+      .rating-row { gap: 13px; padding: 18px 13px; }
+      .rating-name { font-size: 0.94rem; }
       .score-options { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-      .score-choice span { min-height: 40px; font-size: 0.76rem; }
-      .action-panel { grid-template-columns: 1fr; gap: 22px; padding: 28px 20px; }
+      .score-choice span { min-height: 46px; font-size: 0.82rem; }
+      .rating-note-details summary { min-height: 32px; padding-top: 3px; font-size: 0.84rem; }
+      .action-panel { grid-template-columns: 1fr; gap: 24px; padding: 30px 22px; }
+      .action-panel h2 { font-size: 2rem; line-height: 0.98; }
+      .action-panel p { font-size: 0.95rem; line-height: 1.55; }
       .button-stack { min-width: 0; width: 100%; }
       .site-footer { display: block; }
       .site-footer p + p { margin-top: 14px; }
       .toast { right: 11px; bottom: 11px; max-width: calc(100vw - 22px); }
+    }
+
+    @media (max-width: 360px) {
+      .page-shell { width: min(100% - 24px, 1080px); }
+      .brand-row { gap: 10px; }
+      .brand-logo { width: min(180px, 57vw); }
+      .camp-label { max-width: 84px; font-size: 0.56rem; }
+      h1 { font-size: clamp(2.05rem, 10.4vw, 2.5rem); }
+      .section-index { padding-inline: 14px; }
+      .section-content { padding: 24px 14px 28px; }
+      .rating-row { padding: 17px 8px; }
+      .score-options { gap: 4px; }
+      .score-choice span { min-width: 44px; }
+      .action-panel { padding-inline: 18px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -970,12 +1079,12 @@
           </div>
           <div class="fields">
             <fieldset class="question full" data-progress>
-              <legend>Obiectiv principal</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="main_goal" value="Participare competiție" data-label="Participare competiție"><span>Participare competiție</span></label>
-                <label class="choice"><input type="radio" name="main_goal" value="Îmbunătățire strategie" data-label="Îmbunătățire strategie"><span>Îmbunătățire strategie</span></label>
-                <label class="choice"><input type="radio" name="main_goal" value="Sparring competițional" data-label="Sparring competițional"><span>Sparring competițional</span></label>
-                <label class="choice"><input type="radio" name="main_goal" value="Altul" data-label="Altul" data-other-target="goal-other-wrap"><span>Altul</span></label>
+              <legend>Obiectiv principal <span class="optional">Poți selecta mai multe</span></legend>
+              <div class="choices choice-list">
+                <label class="choice"><input type="checkbox" name="main_goal" value="Participare competiție" data-label="Participare competiție"><span>Participare competiție</span></label>
+                <label class="choice"><input type="checkbox" name="main_goal" value="Îmbunătățire strategie" data-label="Îmbunătățire strategie"><span>Îmbunătățire strategie</span></label>
+                <label class="choice"><input type="checkbox" name="main_goal" value="Sparring competițional" data-label="Sparring competițional"><span>Sparring competițional</span></label>
+                <label class="choice"><input type="checkbox" name="main_goal" value="Altul" data-label="Altul" data-other-target="goal-other-wrap"><span>Altul</span></label>
               </div>
               <div id="goal-other-wrap" class="other-wrap" hidden>
                 <label class="field-label" for="goal-other">Alt obiectiv</label>
@@ -1025,13 +1134,13 @@
             </div>
 
             <fieldset class="question" data-progress>
-              <legend>Poziție de control preferată</legend>
+              <legend>Poziții de control preferate <span class="optional">Poți selecta mai multe</span></legend>
               <div class="choices">
-                <label class="choice"><input type="radio" name="control_position" value="Side control" data-label="Side control"><span>Side control</span></label>
-                <label class="choice"><input type="radio" name="control_position" value="Mount" data-label="Mount"><span>Mount</span></label>
-                <label class="choice"><input type="radio" name="control_position" value="Back" data-label="Back"><span>Back</span></label>
-                <label class="choice"><input type="radio" name="control_position" value="Knee on belly" data-label="Knee on belly"><span>Knee on belly</span></label>
-                <label class="choice"><input type="radio" name="control_position" value="Alta" data-label="Alta" data-other-target="control-other-wrap"><span>Alta</span></label>
+                <label class="choice"><input type="checkbox" name="control_position" value="Side control" data-label="Side control"><span>Side control</span></label>
+                <label class="choice"><input type="checkbox" name="control_position" value="Mount" data-label="Mount"><span>Mount</span></label>
+                <label class="choice"><input type="checkbox" name="control_position" value="Back" data-label="Back"><span>Back</span></label>
+                <label class="choice"><input type="checkbox" name="control_position" value="Knee on belly" data-label="Knee on belly"><span>Knee on belly</span></label>
+                <label class="choice"><input type="checkbox" name="control_position" value="Alta" data-label="Alta" data-other-target="control-other-wrap"><span>Alta</span></label>
               </div>
               <div id="control-other-wrap" class="other-wrap" hidden>
                 <label class="field-label" for="control-other">Altă poziție</label>
@@ -1240,25 +1349,34 @@
       let toastTimer = null;
       let savedState = {};
 
-      const ratings = [
-        ['strength', 'Forță'],
-        ['conditioning', 'Condiție fizică'],
-        ['explosion', 'Explozie'],
-        ['speed', 'Viteză'],
-        ['mobility', 'Flexibilitate / mobilitate'],
-        ['pressure_resistance', 'Rezistență la presiune'],
-        ['mental_strength', 'Forță psihică'],
-        ['emotional_control', 'Control emoțional'],
-        ['defensive_technique', 'Tehnică defensivă'],
-        ['offensive_technique', 'Tehnică ofensivă'],
-        ['wrestling', 'Wrestling / stand-up'],
-        ['guard', 'Gardă'],
-        ['passing', 'Passing'],
-        ['submissions', 'Finalizări'],
-        ['scoring', 'Înțelegere punctaj'],
-        ['strategy', 'Game plan / strategie'],
-        ['weight_management', 'Management greutate / categorie']
+      const ratingGroups = [
+        ['Fizic', [
+          ['strength', 'Forță'],
+          ['conditioning', 'Condiție fizică'],
+          ['explosion', 'Explozie'],
+          ['speed', 'Viteză'],
+          ['mobility', 'Flexibilitate / mobilitate']
+        ]],
+        ['Mental', [
+          ['pressure_resistance', 'Rezistență la presiune'],
+          ['mental_strength', 'Forță psihică'],
+          ['emotional_control', 'Control emoțional']
+        ]],
+        ['Tehnică', [
+          ['defensive_technique', 'Tehnică defensivă'],
+          ['offensive_technique', 'Tehnică ofensivă'],
+          ['wrestling', 'Wrestling / stand-up'],
+          ['guard', 'Gardă'],
+          ['passing', 'Passing'],
+          ['submissions', 'Finalizări']
+        ]],
+        ['Competiție', [
+          ['scoring', 'Înțelegere punctaj'],
+          ['strategy', 'Game plan / strategie'],
+          ['weight_management', 'Management greutate / categorie']
+        ]]
       ];
+      const ratings = ratingGroups.flatMap(([, items]) => items);
 
       const escapeHTML = (value) => String(value ?? '')
         .replaceAll('&', '&amp;')
@@ -1268,19 +1386,29 @@
         .replaceAll("'", '&#039;');
 
       function renderRatings() {
-        const rows = ratings.map(([key, label]) => {
-          const options = Array.from({ length: 10 }, (_, index) => {
-            const score = index + 1;
-            return `<label class="score-choice"><input type="radio" name="rating_${key}" value="${score}" aria-label="${escapeHTML(label)}, nota ${score}"><span>${score}</span></label>`;
+        const rows = ratingGroups.map(([group, items], groupIndex) => {
+          const groupRows = items.map(([key, label]) => {
+            const options = Array.from({ length: 10 }, (_, index) => {
+              const score = index + 1;
+              return `<label class="score-choice"><input type="radio" name="rating_${key}" value="${score}" aria-label="${escapeHTML(label)}, nota ${score}"><span>${score}</span></label>`;
+            }).join('');
+            return `
+              <div class="rating-row question" data-progress data-rating-key="${key}">
+                <p class="rating-name">${escapeHTML(label)}</p>
+                <div class="score-options" role="radiogroup" aria-label="${escapeHTML(label)}, notă de la 1 la 10">${options}</div>
+                <details class="rating-note-details">
+                  <summary>Adaugă o observație</summary>
+                  <textarea class="rating-note" name="rating_${key}_note" rows="2" aria-label="Observații pentru ${escapeHTML(label)}" placeholder="Observație opțională"></textarea>
+                </details>
+              </div>`;
           }).join('');
           return `
-            <div class="rating-row question" data-progress data-rating-key="${key}">
-              <p class="rating-name">${escapeHTML(label)}</p>
-              <div class="score-options" role="radiogroup" aria-label="${escapeHTML(label)}, notă de la 1 la 10">${options}</div>
-              <input class="rating-note" name="rating_${key}_note" type="text" aria-label="Observații pentru ${escapeHTML(label)}" placeholder="Observații, opțional">
-            </div>`;
+            <section class="rating-group" aria-labelledby="rating-group-${groupIndex}">
+              <h3 id="rating-group-${groupIndex}" class="rating-group-title">${escapeHTML(group)}</h3>
+              <div class="rating-group-list">${groupRows}</div>
+            </section>`;
         }).join('');
-        // Safe template: labels and keys come only from the static ratings array above.
+        // Safe template: labels and keys come only from the static ratingGroups array above.
         ratingList.innerHTML = rows;
       }
 
@@ -1306,12 +1434,18 @@
         Array.from(form.elements).forEach((field) => {
           if (!field.name || !(field.name in state)) return;
           if (field.type === 'checkbox') {
-            field.checked = Array.isArray(state[field.name]) && state[field.name].includes(field.value);
+            field.checked = Array.isArray(state[field.name])
+              ? state[field.name].includes(field.value)
+              : state[field.name] === field.value;
           } else if (field.type === 'radio') {
             field.checked = state[field.name] === field.value;
           } else {
             field.value = state[field.name] ?? '';
           }
+        });
+        document.querySelectorAll('.rating-note-details').forEach((details) => {
+          const note = details.querySelector('.rating-note');
+          details.open = Boolean(note && String(note.value || '').trim());
         });
       }
 
@@ -1489,7 +1623,7 @@
           pdfAnswer('Poziție preferată', getValue('preferred_position')),
           pdfAnswer('Gardă preferată', getValue('preferred_guard')),
           pdfAnswer('Trecere preferată', getValue('preferred_pass')),
-          pdfAnswer('Poziție de control preferată', withOther('control_position', 'control_position_other', 'Alta')),
+          pdfAnswer('Poziții de control preferate', withOther('control_position', 'control_position_other', 'Alta')),
           pdfAnswer('Finalizare preferată', getValue('preferred_finish'))
         ]);
 
