@@ -704,6 +704,148 @@
 
     .toast.is-visible { opacity: 1; transform: translateY(0); }
 
+    .pdf-ready-dialog {
+      width: min(520px, calc(100% - 28px));
+      max-height: calc(100dvh - 28px);
+      margin: auto;
+      padding: 0;
+      color: var(--ink);
+      background: #10140e;
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58);
+      overflow: auto;
+    }
+
+    .pdf-ready-dialog::backdrop {
+      background: rgba(2, 3, 2, 0.78);
+      backdrop-filter: blur(5px);
+    }
+
+    .pdf-ready-card {
+      position: relative;
+      padding: clamp(26px, 6vw, 42px);
+    }
+
+    .pdf-dialog-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      place-items: center;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      font: 400 1.7rem/1 var(--body);
+    }
+
+    .pdf-dialog-close:hover { color: var(--ink); background: rgba(255, 255, 255, 0.07); }
+
+    .pdf-ready-mark {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      margin-bottom: 22px;
+      place-items: center;
+      color: #10130c;
+      background: var(--olive-light);
+      border-radius: 50%;
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+
+    .pdf-ready-dialog h2 {
+      max-width: calc(100% - 36px);
+      font-size: clamp(2rem, 7vw, 3rem);
+      line-height: 0.96;
+    }
+
+    .pdf-ready-copy {
+      margin: 12px 0 22px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+
+    .pdf-file-card {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      margin-bottom: 18px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .pdf-file-badge {
+      display: grid;
+      height: 40px;
+      place-items: center;
+      color: #10130c;
+      background: var(--olive-light);
+      border-radius: 7px;
+      font-family: var(--display);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .pdf-file-name {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 0.87rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pdf-file-size { display: block; margin-top: 3px; color: var(--muted); font-size: 0.76rem; }
+
+    .pdf-dialog-actions { display: grid; gap: 9px; }
+    .pdf-dialog-actions [hidden] { display: none !important; }
+
+    .pdf-dialog-actions .primary-button,
+    .pdf-direct-download {
+      width: 100%;
+      min-height: 52px;
+      text-decoration: none;
+    }
+
+    .pdf-direct-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      font-family: var(--display);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .pdf-direct-download:hover { background: rgba(255, 255, 255, 0.11); }
+    .pdf-direct-download.is-primary { color: var(--ink); background: #090b08; border-color: #090b08; }
+
+    .pdf-save-hint {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
     #pdf-root {
       position: fixed;
       z-index: -1;
@@ -949,6 +1091,10 @@
       .site-footer { display: block; }
       .site-footer p + p { margin-top: 14px; }
       .toast { right: 11px; bottom: 11px; max-width: calc(100vw - 22px); }
+      .pdf-ready-dialog { width: calc(100% - 22px); max-height: calc(100dvh - 22px); }
+      .pdf-ready-card { padding: 30px 20px 24px; }
+      .pdf-ready-mark { margin-bottom: 18px; }
+      .pdf-ready-dialog h2 { font-size: 2.2rem; }
     }
 
     @media (max-width: 360px) {
@@ -1325,6 +1471,26 @@
   </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="pdf-ready-dialog" class="pdf-ready-dialog" aria-labelledby="pdf-ready-title" aria-describedby="pdf-ready-description">
+    <div class="pdf-ready-card">
+      <button id="pdf-dialog-close" class="pdf-dialog-close" type="button" aria-label="Închide">×</button>
+      <div class="pdf-ready-mark" aria-hidden="true">✓</div>
+      <h2 id="pdf-ready-title">PDF-ul este gata.</h2>
+      <p id="pdf-ready-description" class="pdf-ready-copy">Alege mai jos cum vrei să salvezi chestionarul.</p>
+      <div class="pdf-file-card" aria-live="polite">
+        <span class="pdf-file-badge" aria-hidden="true">PDF</span>
+        <span>
+          <strong id="pdf-file-name" class="pdf-file-name">Chestionar EDEN</strong>
+          <small id="pdf-file-size" class="pdf-file-size"></small>
+        </span>
+      </div>
+      <div class="pdf-dialog-actions">
+        <button id="save-share-pdf" class="primary-button" type="button">Salvează / trimite PDF</button>
+        <a id="direct-download-pdf" class="pdf-direct-download" href="#" download>Descarcă direct</a>
+      </div>
+      <p id="pdf-save-hint" class="pdf-save-hint">Pe telefon se va deschide meniul de salvare sau trimitere. Alege opțiunea de salvare în fișiere.</p>
+    </div>
+  </dialog>
   <div id="pdf-root" aria-hidden="true"></div>
 
   <script src="assets/html2pdf.bundle.min.js"></script>
@@ -1345,9 +1511,18 @@
       const resetButton = document.getElementById('reset-form');
       const toast = document.getElementById('toast');
       const pdfRoot = document.getElementById('pdf-root');
+      const pdfReadyDialog = document.getElementById('pdf-ready-dialog');
+      const pdfDialogClose = document.getElementById('pdf-dialog-close');
+      const saveSharePdfButton = document.getElementById('save-share-pdf');
+      const directDownloadPdf = document.getElementById('direct-download-pdf');
+      const pdfFileName = document.getElementById('pdf-file-name');
+      const pdfFileSize = document.getElementById('pdf-file-size');
+      const pdfSaveHint = document.getElementById('pdf-save-hint');
       let saveTimer = null;
       let toastTimer = null;
       let savedState = {};
+      let preparedPdf = null;
+      let preparedPdfUrl = '';
 
       const ratingGroups = [
         ['Fizic', [
@@ -1714,6 +1889,104 @@
         return clean || 'Chestionar';
       }
 
+      function formatFileSize(bytes) {
+        if (!Number.isFinite(bytes) || bytes <= 0) return '';
+        const units = ['B', 'KB', 'MB'];
+        let value = bytes;
+        let unitIndex = 0;
+        while (value >= 1024 && unitIndex < units.length - 1) {
+          value /= 1024;
+          unitIndex += 1;
+        }
+        return `${new Intl.NumberFormat('ro-RO', { maximumFractionDigits: unitIndex === 0 ? 0 : 1 }).format(value)} ${units[unitIndex]}`;
+      }
+
+      function releasePreparedPdf() {
+        if (preparedPdfUrl) URL.revokeObjectURL(preparedPdfUrl);
+        preparedPdf = null;
+        preparedPdfUrl = '';
+        directDownloadPdf.removeAttribute('href');
+        directDownloadPdf.removeAttribute('download');
+      }
+
+      function canSharePreparedFile(file) {
+        if (!file || typeof navigator.share !== 'function' || typeof navigator.canShare !== 'function') return false;
+        try {
+          return navigator.canShare({ files: [file] });
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function showPdfReadyDialog(pdfBlob, filename) {
+        releasePreparedPdf();
+        preparedPdfUrl = URL.createObjectURL(pdfBlob);
+
+        let file = null;
+        try {
+          file = new File([pdfBlob], filename, { type: 'application/pdf', lastModified: Date.now() });
+        } catch (error) {
+          file = null;
+        }
+
+        const canShare = canSharePreparedFile(file);
+        const canPickFile = typeof window.showSaveFilePicker === 'function';
+        preparedPdf = { blob: pdfBlob, file, filename, canShare, canPickFile };
+
+        pdfFileName.textContent = filename;
+        pdfFileSize.textContent = formatFileSize(pdfBlob.size);
+        directDownloadPdf.href = preparedPdfUrl;
+        directDownloadPdf.download = filename;
+        directDownloadPdf.classList.toggle('is-primary', !canShare && !canPickFile);
+
+        saveSharePdfButton.hidden = !canShare && !canPickFile;
+        saveSharePdfButton.textContent = canShare ? 'Salvează / trimite PDF' : 'Salvează PDF';
+        pdfSaveHint.textContent = canShare
+          ? 'Pe telefon se va deschide meniul de salvare sau trimitere. Alege opțiunea de salvare în fișiere.'
+          : canPickFile
+            ? 'Alege folderul în care vrei să salvezi PDF-ul.'
+            : 'Apasă „Descarcă direct”. Fișierul va fi salvat în folderul de descărcări al browserului.';
+
+        if (pdfReadyDialog.open) pdfReadyDialog.close();
+        if (typeof pdfReadyDialog.showModal === 'function') pdfReadyDialog.showModal();
+        else pdfReadyDialog.setAttribute('open', '');
+      }
+
+      async function saveOrSharePreparedPdf() {
+        if (!preparedPdf) {
+          showToast('Generează din nou PDF-ul și încearcă iar.');
+          return;
+        }
+
+        try {
+          if (preparedPdf.canShare) {
+            await navigator.share({
+              files: [preparedPdf.file],
+              title: 'Chestionar EDEN Competition Camp'
+            });
+            autosaveStatus.textContent = 'PDF salvat sau trimis cu succes.';
+            showToast('PDF-ul a fost salvat sau trimis.');
+            return;
+          }
+
+          if (preparedPdf.canPickFile) {
+            const handle = await window.showSaveFilePicker({
+              suggestedName: preparedPdf.filename,
+              types: [{ description: 'Document PDF', accept: { 'application/pdf': ['.pdf'] } }]
+            });
+            const writable = await handle.createWritable();
+            await writable.write(preparedPdf.blob);
+            await writable.close();
+            autosaveStatus.textContent = 'PDF salvat cu succes.';
+            showToast('PDF-ul a fost salvat.');
+          }
+        } catch (error) {
+          if (error && error.name === 'AbortError') return;
+          console.error('PDF save or share failed:', error);
+          showToast('Meniul de salvare nu s-a putut deschide. Folosește „Descarcă direct”.');
+        }
+      }
+
       async function downloadPdf() {
         if (typeof window.html2pdf !== 'function') {
           showToast('Generatorul PDF nu s-a încărcat. Reîncarcă pagina și încearcă din nou.');
@@ -1758,17 +2031,9 @@
             throw new Error('Generated PDF did not pass the file validation check.');
           }
 
-          const downloadUrl = URL.createObjectURL(pdfBlob);
-          const downloadLink = document.createElement('a');
-          downloadLink.href = downloadUrl;
-          downloadLink.download = options.filename;
-          downloadLink.hidden = true;
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          downloadLink.remove();
-          setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
-          showToast('PDF-ul a fost descărcat.');
-          autosaveStatus.textContent = 'PDF descărcat cu succes.';
+          showPdfReadyDialog(pdfBlob, options.filename);
+          showToast('PDF-ul este gata. Alege cum vrei să îl salvezi.');
+          autosaveStatus.textContent = 'PDF pregătit pentru salvare.';
         } catch (error) {
           console.error('PDF generation failed:', error);
           showToast('PDF-ul nu a putut fi generat. Reîncarcă pagina și încearcă din nou.');
@@ -1816,8 +2081,22 @@
       });
 
       downloadButton.addEventListener('click', downloadPdf);
+      saveSharePdfButton.addEventListener('click', saveOrSharePreparedPdf);
+      pdfDialogClose.addEventListener('click', () => pdfReadyDialog.close());
+      directDownloadPdf.addEventListener('click', (event) => {
+        if (!preparedPdfUrl) {
+          event.preventDefault();
+          showToast('Generează din nou PDF-ul și încearcă iar.');
+          return;
+        }
+        autosaveStatus.textContent = 'Descărcarea PDF-ului a început.';
+        showToast('Descărcarea PDF-ului a început.');
+      });
       resetButton.addEventListener('click', resetForm);
-      window.addEventListener('pagehide', saveForm);
+      window.addEventListener('pagehide', () => {
+        saveForm();
+        releasePreparedPdf();
+      });
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') saveForm();
       });
