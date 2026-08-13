@@ -208,6 +208,75 @@
       white-space: nowrap;
     }
 
+    .draft-manager {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(420px, 1.18fr);
+      gap: 28px;
+      align-items: end;
+      padding: 18px 20px;
+      margin: 0 auto 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .draft-kicker {
+      margin: 0 0 5px;
+      color: var(--olive-light);
+      font-family: var(--display);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .draft-help {
+      max-width: 510px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .draft-controls {
+      display: grid;
+      grid-template-columns: minmax(230px, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .draft-field-label {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .draft-select { min-height: 46px; padding: 10px 38px 10px 12px; }
+
+    .draft-new-button {
+      min-height: 46px;
+      padding: 10px 16px;
+      color: #10130c;
+      background: var(--olive-light);
+      border: 1px solid var(--olive-light);
+      border-radius: 9px;
+      cursor: pointer;
+      font-family: var(--display);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.065em;
+      text-transform: uppercase;
+      transition: transform 140ms ease, background-color 140ms ease;
+    }
+
+    .draft-new-button:hover { background: #c8cf95; transform: translateY(-1px); }
+
     main { padding: 40px 0 80px; }
 
     form { display: grid; gap: 18px; }
@@ -814,6 +883,7 @@
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; gap: 26px; align-items: start; }
       .hero-note { max-width: 600px; }
+      .draft-manager { grid-template-columns: 1fr; gap: 16px; align-items: start; }
       .form-section { grid-template-columns: 82px minmax(0, 1fr); }
       .section-index { padding: 28px 18px; font-size: 2.2rem; }
       .rating-row { grid-template-columns: 1fr; gap: 11px; }
@@ -827,8 +897,11 @@
       .brand-logo { width: min(235px, 64vw); }
       .camp-label { max-width: 95px; font-size: 0.62rem; line-height: 1.45; }
       .hero { padding: 46px 0 36px; }
-      h1 { font-size: clamp(2.8rem, 13.3vw, 4.15rem); line-height: 0.88; }
+      h1 { font-size: clamp(2.55rem, 11.8vw, 3.7rem); line-height: 0.9; }
       .hero-note { padding: 14px 0 0 16px; }
+      .draft-manager { padding: 17px; margin-bottom: 16px; }
+      .draft-controls { grid-template-columns: 1fr; }
+      .draft-new-button { width: 100%; }
       .progress-inner { grid-template-columns: 1fr auto; gap: 9px 14px; min-height: 66px; padding: 11px 0; }
       .progress-track { grid-column: 1 / -1; grid-row: 2; }
       main { padding: 24px 0 52px; }
@@ -881,6 +954,20 @@
       Completează chestionarul înainte de camp. Răspunsurile tale se salvează automat pe acest dispozitiv.
     </p>
   </div>
+
+  <section class="draft-manager page-shell" aria-labelledby="draft-manager-title">
+    <div>
+      <p id="draft-manager-title" class="draft-kicker">Chestionare pe acest dispozitiv</p>
+      <p class="draft-help">Fiecare sportiv poate avea propriul chestionar. Răspunsurile reapar după închiderea și redeschiderea paginii în același browser.</p>
+    </div>
+    <div class="draft-controls">
+      <div>
+        <label class="draft-field-label" for="draft-select">Chestionar activ</label>
+        <select id="draft-select" class="draft-select" aria-label="Alege chestionarul salvat"></select>
+      </div>
+      <button id="new-draft" class="draft-new-button" type="button">Chestionar nou</button>
+    </div>
+  </section>
 
   <div class="progress-dock" aria-label="Progres chestionar">
     <div class="page-shell progress-inner">
@@ -1203,7 +1290,7 @@
             <svg class="download-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"></path></svg>
             <span>Descarcă PDF</span>
           </button>
-          <button id="reset-form" class="secondary-button" type="button">Șterge răspunsurile</button>
+          <button id="reset-form" class="secondary-button" type="button">Șterge acest chestionar</button>
         </div>
       </section>
     </form>
@@ -1211,7 +1298,7 @@
 
   <footer class="site-footer page-shell">
     <p><strong>EDEN Jiu Jitsu</strong><br>Competition Camp · Game Plan</p>
-    <p>Datele nu sunt trimise online. Ele rămân pe dispozitiv și sunt incluse doar în PDF-ul generat.</p>
+    <p>Datele nu sunt trimise online. Fiecare browser le păstrează separat, pe dispozitiv, până când chestionarul sau datele site-ului sunt șterse.</p>
   </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -1222,7 +1309,8 @@
     (() => {
       'use strict';
 
-      const STORAGE_KEY = 'eden-comp-questionnaire-v1';
+      const STORAGE_KEY = 'eden-comp-questionnaires-v2';
+      const LEGACY_STORAGE_KEY = 'eden-comp-questionnaire-v1';
       const form = document.getElementById('camp-form');
       const ratingList = document.getElementById('rating-list');
       const progressTrack = document.querySelector('.progress-track');
@@ -1231,10 +1319,13 @@
       const autosaveStatus = document.querySelector('.autosave-status');
       const downloadButton = document.getElementById('download-pdf');
       const resetButton = document.getElementById('reset-form');
+      const draftSelect = document.getElementById('draft-select');
+      const newDraftButton = document.getElementById('new-draft');
       const toast = document.getElementById('toast');
       const pdfRoot = document.getElementById('pdf-root');
       let saveTimer = null;
       let toastTimer = null;
+      let draftStore = { version: 2, activeId: '', drafts: {} };
 
       const ratings = [
         ['strength', 'Forță'],
@@ -1311,10 +1402,121 @@
         });
       }
 
-      function saveForm() {
+      function makeDraftId() {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+        return `draft-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      }
+
+      function makeDraft(state = {}, label = 'Chestionar nou') {
+        const id = makeDraftId();
+        return { id, label, state, updatedAt: new Date().toISOString() };
+      }
+
+      function activeDraft() {
+        return draftStore.drafts[draftStore.activeId] || null;
+      }
+
+      function persistDraftStore() {
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormState()));
-          autosaveStatus.textContent = 'Răspunsurile au fost salvate automat pe acest dispozitiv.';
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(draftStore));
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function loadDraftStore() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+          if (stored && stored.version === 2 && stored.drafts && typeof stored.drafts === 'object') {
+            draftStore = stored;
+          } else {
+            let legacyState = {};
+            const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+            if (legacy) legacyState = JSON.parse(legacy);
+            const label = legacy
+              ? (String(legacyState.full_name || '').trim() || 'Chestionar migrat')
+              : 'Chestionar nou';
+            const draft = makeDraft(legacyState, label);
+            draftStore = { version: 2, activeId: draft.id, drafts: { [draft.id]: draft } };
+          }
+        } catch (error) {
+          const draft = makeDraft();
+          draftStore = { version: 2, activeId: draft.id, drafts: { [draft.id]: draft } };
+        }
+
+        Object.entries(draftStore.drafts).forEach(([id, draft]) => {
+          if (!draft || typeof draft !== 'object') {
+            delete draftStore.drafts[id];
+            return;
+          }
+          draft.id = id;
+          draft.state = draft.state && typeof draft.state === 'object' ? draft.state : {};
+          draft.label = String(draft.label || draft.state.full_name || 'Chestionar nou');
+          draft.updatedAt = draft.updatedAt || new Date().toISOString();
+        });
+
+        const ids = Object.keys(draftStore.drafts);
+        if (!ids.length) {
+          const draft = makeDraft();
+          draftStore.drafts[draft.id] = draft;
+          draftStore.activeId = draft.id;
+        } else if (!draftStore.drafts[draftStore.activeId]) {
+          draftStore.activeId = ids.sort((a, b) => String(draftStore.drafts[b].updatedAt).localeCompare(String(draftStore.drafts[a].updatedAt)))[0];
+        }
+
+        const storedSuccessfully = persistDraftStore();
+        if (storedSuccessfully) {
+          try { localStorage.removeItem(LEGACY_STORAGE_KEY); } catch (error) { /* Storage unavailable. */ }
+        }
+      }
+
+      function draftDisplayName(draft) {
+        const athlete = String(draft.state.full_name || '').trim();
+        const name = athlete || draft.label || 'Chestionar nou';
+        let updated = '';
+        try {
+          updated = new Intl.DateTimeFormat('ro-RO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(draft.updatedAt));
+        } catch (error) {
+          updated = '';
+        }
+        return updated ? `${name} · ${updated}` : name;
+      }
+
+      function renderDraftOptions() {
+        const drafts = Object.values(draftStore.drafts)
+          .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+        draftSelect.replaceChildren(...drafts.map((draft) => {
+          const option = document.createElement('option');
+          option.value = draft.id;
+          option.textContent = draftDisplayName(draft);
+          return option;
+        }));
+        draftSelect.value = draftStore.activeId;
+      }
+
+      function loadActiveDraft() {
+        clearTimeout(saveTimer);
+        form.reset();
+        const draft = activeDraft();
+        if (draft) applyFormState(draft.state);
+        syncOtherFields();
+        updateProgress();
+        renderDraftOptions();
+        autosaveStatus.textContent = 'Chestionarul activ a fost încărcat de pe acest dispozitiv.';
+      }
+
+      function saveForm(renderOptions = true) {
+        try {
+          const draft = activeDraft();
+          if (!draft) return;
+          draft.state = getFormState();
+          const athlete = String(draft.state.full_name || '').trim();
+          if (athlete) draft.label = athlete;
+          draft.updatedAt = new Date().toISOString();
+          if (!persistDraftStore()) throw new Error('Local storage is unavailable.');
+          if (renderOptions) renderDraftOptions();
+          autosaveStatus.textContent = 'Răspunsurile acestui sportiv au fost salvate automat pe acest dispozitiv.';
         } catch (error) {
           autosaveStatus.textContent = 'Salvarea automată nu este disponibilă în acest browser.';
         }
@@ -1326,13 +1528,27 @@
         saveTimer = setTimeout(saveForm, 180);
       }
 
-      function loadForm() {
-        try {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) applyFormState(JSON.parse(saved));
-        } catch (error) {
-          localStorage.removeItem(STORAGE_KEY);
-        }
+      function createNewDraft() {
+        saveForm(false);
+        const labels = new Set(Object.values(draftStore.drafts).map((draft) => draft.label));
+        let number = 1;
+        while (labels.has(`Chestionar nou ${number}`)) number += 1;
+        const draft = makeDraft({}, `Chestionar nou ${number}`);
+        draftStore.drafts[draft.id] = draft;
+        draftStore.activeId = draft.id;
+        persistDraftStore();
+        loadActiveDraft();
+        showToast('Chestionar nou creat. Celelalte răspunsuri rămân salvate.');
+        requestAnimationFrame(() => document.getElementById('full-name').focus());
+      }
+
+      function switchDraft(id) {
+        if (!draftStore.drafts[id] || id === draftStore.activeId) return;
+        saveForm(false);
+        draftStore.activeId = id;
+        persistDraftStore();
+        loadActiveDraft();
+        showToast('Chestionarul selectat a fost încărcat.');
       }
 
       function syncOtherFields() {
@@ -1601,21 +1817,29 @@
       }
 
       function resetForm() {
-        const confirmed = window.confirm('Ștergi toate răspunsurile salvate pe acest dispozitiv?');
+        const draft = activeDraft();
+        const athlete = draft ? String(draft.state.full_name || draft.label || 'acest sportiv').trim() : 'acest sportiv';
+        const confirmed = window.confirm(`Ștergi chestionarul pentru ${athlete}? Celelalte chestionare salvate nu vor fi afectate.`);
         if (!confirmed) return;
-        form.reset();
-        localStorage.removeItem(STORAGE_KEY);
-        syncOtherFields();
-        updateProgress();
-        autosaveStatus.textContent = 'Toate răspunsurile au fost șterse.';
-        showToast('Răspunsurile au fost șterse.');
+        if (draft) delete draftStore.drafts[draft.id];
+        const remaining = Object.values(draftStore.drafts).sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+        if (remaining.length) {
+          draftStore.activeId = remaining[0].id;
+        } else {
+          const replacement = makeDraft();
+          draftStore.drafts[replacement.id] = replacement;
+          draftStore.activeId = replacement.id;
+        }
+        persistDraftStore();
+        loadActiveDraft();
+        autosaveStatus.textContent = 'Chestionarul selectat a fost șters.';
+        showToast('Chestionarul a fost șters.');
         document.getElementById('questionnaire').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
       renderRatings();
-      loadForm();
-      syncOtherFields();
-      updateProgress();
+      loadDraftStore();
+      loadActiveDraft();
 
       form.addEventListener('input', () => {
         syncOtherFields();
@@ -1637,6 +1861,12 @@
 
       downloadButton.addEventListener('click', downloadPdf);
       resetButton.addEventListener('click', resetForm);
+      newDraftButton.addEventListener('click', createNewDraft);
+      draftSelect.addEventListener('change', () => switchDraft(draftSelect.value));
+      window.addEventListener('pagehide', () => saveForm(false));
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') saveForm(false);
+      });
     })();
   </script>
 </body>
