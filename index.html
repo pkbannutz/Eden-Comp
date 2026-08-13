@@ -208,75 +208,6 @@
       white-space: nowrap;
     }
 
-    .draft-manager {
-      display: grid;
-      grid-template-columns: minmax(0, 0.82fr) minmax(420px, 1.18fr);
-      gap: 28px;
-      align-items: end;
-      padding: 18px 20px;
-      margin: 0 auto 24px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .draft-kicker {
-      margin: 0 0 5px;
-      color: var(--olive-light);
-      font-family: var(--display);
-      font-size: 0.78rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .draft-help {
-      max-width: 510px;
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.45;
-    }
-
-    .draft-controls {
-      display: grid;
-      grid-template-columns: minmax(230px, 1fr) auto;
-      gap: 10px;
-      align-items: end;
-    }
-
-    .draft-field-label {
-      display: block;
-      margin: 0 0 7px;
-      color: var(--ink);
-      font-family: var(--display);
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-    }
-
-    .draft-select { min-height: 46px; padding: 10px 38px 10px 12px; }
-
-    .draft-new-button {
-      min-height: 46px;
-      padding: 10px 16px;
-      color: #10130c;
-      background: var(--olive-light);
-      border: 1px solid var(--olive-light);
-      border-radius: 9px;
-      cursor: pointer;
-      font-family: var(--display);
-      font-size: 0.78rem;
-      font-weight: 900;
-      letter-spacing: 0.065em;
-      text-transform: uppercase;
-      transition: transform 140ms ease, background-color 140ms ease;
-    }
-
-    .draft-new-button:hover { background: #c8cf95; transform: translateY(-1px); }
-
     main { padding: 40px 0 80px; }
 
     form { display: grid; gap: 18px; }
@@ -883,7 +814,6 @@
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; gap: 26px; align-items: start; }
       .hero-note { max-width: 600px; }
-      .draft-manager { grid-template-columns: 1fr; gap: 16px; align-items: start; }
       .form-section { grid-template-columns: 82px minmax(0, 1fr); }
       .section-index { padding: 28px 18px; font-size: 2.2rem; }
       .rating-row { grid-template-columns: 1fr; gap: 11px; }
@@ -891,36 +821,34 @@
     }
 
     @media (max-width: 640px) {
-      .page-shell { width: min(100% - 22px, 1080px); }
+      .page-shell { width: min(100% - 32px, 1080px); }
       .site-header { padding: 22px 0 18px; }
-      .brand-row { align-items: flex-end; gap: 14px; }
-      .brand-logo { width: min(235px, 64vw); }
-      .camp-label { max-width: 95px; font-size: 0.62rem; line-height: 1.45; }
-      .hero { padding: 46px 0 36px; }
-      h1 { font-size: clamp(2.55rem, 11.8vw, 3.7rem); line-height: 0.9; }
-      .hero-note { padding: 14px 0 0 16px; }
-      .draft-manager { padding: 17px; margin-bottom: 16px; }
-      .draft-controls { grid-template-columns: 1fr; }
-      .draft-new-button { width: 100%; }
+      .brand-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; }
+      .brand-logo { width: min(220px, 60vw); }
+      .camp-label { max-width: 100px; font-size: 0.62rem; line-height: 1.45; }
+      .hero { gap: 24px; padding: 42px 0 34px; }
+      h1 { font-size: clamp(2.45rem, 11.4vw, 3.6rem); line-height: 0.91; }
+      .hero-note { max-width: none; padding: 14px 0 0 16px; }
       .progress-inner { grid-template-columns: 1fr auto; gap: 9px 14px; min-height: 66px; padding: 11px 0; }
       .progress-track { grid-column: 1 / -1; grid-row: 2; }
       main { padding: 24px 0 52px; }
       form { gap: 12px; }
       .form-section { display: block; }
-      .section-index { padding: 15px 20px 12px; border-right: 0; border-bottom: 1px solid var(--line); font-size: 1.25rem; letter-spacing: 0.06em; }
+      .section-index { padding: 15px 18px 12px; border-right: 0; border-bottom: 1px solid var(--line); font-size: 1.25rem; letter-spacing: 0.06em; }
       .section-index::before { content: "SECȚIUNEA "; color: var(--muted); font-size: 0.65rem; letter-spacing: 0.13em; vertical-align: middle; }
-      .section-content { padding: 24px 17px 28px; }
+      .section-content { padding: 24px 18px 28px; }
       .section-head { display: block; margin-bottom: 22px; }
       .section-hint { margin-top: 7px; text-align: left; }
       .fields { grid-template-columns: 1fr; gap: 21px; }
       .question.full { grid-column: auto; }
-      .choices { gap: 7px; }
-      .choice span { padding: 10px 12px; font-size: 0.84rem; }
+      .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .choice span { height: 100%; justify-content: center; padding: 11px 10px; font-size: 0.84rem; text-align: center; }
+      .choice:last-child:nth-child(odd) { grid-column: 1 / -1; }
       .weakness-grid { grid-template-columns: 1fr; }
       .ratings-intro { grid-template-columns: 1fr; gap: 4px; }
       .rating-row { padding: 14px 11px; }
-      .score-options { gap: 3px; }
-      .score-choice span { min-height: 36px; font-size: 0.7rem; }
+      .score-options { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+      .score-choice span { min-height: 40px; font-size: 0.76rem; }
       .action-panel { grid-template-columns: 1fr; gap: 22px; padding: 28px 20px; }
       .button-stack { min-width: 0; width: 100%; }
       .site-footer { display: block; }
@@ -954,20 +882,6 @@
       Completează chestionarul înainte de camp. Răspunsurile tale se salvează automat pe acest dispozitiv.
     </p>
   </div>
-
-  <section class="draft-manager page-shell" aria-labelledby="draft-manager-title">
-    <div>
-      <p id="draft-manager-title" class="draft-kicker">Chestionare pe acest dispozitiv</p>
-      <p class="draft-help">Fiecare sportiv poate avea propriul chestionar. Răspunsurile reapar după închiderea și redeschiderea paginii în același browser.</p>
-    </div>
-    <div class="draft-controls">
-      <div>
-        <label class="draft-field-label" for="draft-select">Chestionar activ</label>
-        <select id="draft-select" class="draft-select" aria-label="Alege chestionarul salvat"></select>
-      </div>
-      <button id="new-draft" class="draft-new-button" type="button">Chestionar nou</button>
-    </div>
-  </section>
 
   <div class="progress-dock" aria-label="Progres chestionar">
     <div class="page-shell progress-inner">
@@ -1309,7 +1223,8 @@
     (() => {
       'use strict';
 
-      const STORAGE_KEY = 'eden-comp-questionnaires-v2';
+      const STORAGE_KEY = 'eden-comp-questionnaire-v3';
+      const MULTI_STORAGE_KEY = 'eden-comp-questionnaires-v2';
       const LEGACY_STORAGE_KEY = 'eden-comp-questionnaire-v1';
       const form = document.getElementById('camp-form');
       const ratingList = document.getElementById('rating-list');
@@ -1319,13 +1234,11 @@
       const autosaveStatus = document.querySelector('.autosave-status');
       const downloadButton = document.getElementById('download-pdf');
       const resetButton = document.getElementById('reset-form');
-      const draftSelect = document.getElementById('draft-select');
-      const newDraftButton = document.getElementById('new-draft');
       const toast = document.getElementById('toast');
       const pdfRoot = document.getElementById('pdf-root');
       let saveTimer = null;
       let toastTimer = null;
-      let draftStore = { version: 2, activeId: '', drafts: {} };
+      let savedState = {};
 
       const ratings = [
         ['strength', 'Forță'],
@@ -1402,121 +1315,63 @@
         });
       }
 
-      function makeDraftId() {
-        if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
-        return `draft-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-      }
-
-      function makeDraft(state = {}, label = 'Chestionar nou') {
-        const id = makeDraftId();
-        return { id, label, state, updatedAt: new Date().toISOString() };
-      }
-
-      function activeDraft() {
-        return draftStore.drafts[draftStore.activeId] || null;
-      }
-
-      function persistDraftStore() {
+      function readStoredJSON(key) {
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(draftStore));
+          const raw = localStorage.getItem(key);
+          return raw === null ? null : JSON.parse(raw);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function persistSavedState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
           return true;
         } catch (error) {
           return false;
         }
       }
 
-      function loadDraftStore() {
-        try {
-          const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-          if (stored && stored.version === 2 && stored.drafts && typeof stored.drafts === 'object') {
-            draftStore = stored;
+      function loadSavedState() {
+        const current = readStoredJSON(STORAGE_KEY);
+        if (current && typeof current === 'object' && !Array.isArray(current)) {
+          savedState = current;
+        } else {
+          const multi = readStoredJSON(MULTI_STORAGE_KEY);
+          const drafts = multi && multi.drafts && typeof multi.drafts === 'object'
+            ? Object.values(multi.drafts).filter((draft) => draft && typeof draft === 'object')
+            : [];
+          const active = multi && multi.activeId && multi.drafts
+            ? multi.drafts[multi.activeId]
+            : null;
+          const fallback = drafts.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')))[0];
+          const migrated = active || fallback;
+          if (migrated && migrated.state && typeof migrated.state === 'object') {
+            savedState = migrated.state;
           } else {
-            let legacyState = {};
-            const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
-            if (legacy) legacyState = JSON.parse(legacy);
-            const label = legacy
-              ? (String(legacyState.full_name || '').trim() || 'Chestionar migrat')
-              : 'Chestionar nou';
-            const draft = makeDraft(legacyState, label);
-            draftStore = { version: 2, activeId: draft.id, drafts: { [draft.id]: draft } };
+            const legacy = readStoredJSON(LEGACY_STORAGE_KEY);
+            savedState = legacy && typeof legacy === 'object' && !Array.isArray(legacy) ? legacy : {};
           }
-        } catch (error) {
-          const draft = makeDraft();
-          draftStore = { version: 2, activeId: draft.id, drafts: { [draft.id]: draft } };
         }
 
-        Object.entries(draftStore.drafts).forEach(([id, draft]) => {
-          if (!draft || typeof draft !== 'object') {
-            delete draftStore.drafts[id];
-            return;
-          }
-          draft.id = id;
-          draft.state = draft.state && typeof draft.state === 'object' ? draft.state : {};
-          draft.label = String(draft.label || draft.state.full_name || 'Chestionar nou');
-          draft.updatedAt = draft.updatedAt || new Date().toISOString();
-        });
-
-        const ids = Object.keys(draftStore.drafts);
-        if (!ids.length) {
-          const draft = makeDraft();
-          draftStore.drafts[draft.id] = draft;
-          draftStore.activeId = draft.id;
-        } else if (!draftStore.drafts[draftStore.activeId]) {
-          draftStore.activeId = ids.sort((a, b) => String(draftStore.drafts[b].updatedAt).localeCompare(String(draftStore.drafts[a].updatedAt)))[0];
-        }
-
-        const storedSuccessfully = persistDraftStore();
-        if (storedSuccessfully) {
-          try { localStorage.removeItem(LEGACY_STORAGE_KEY); } catch (error) { /* Storage unavailable. */ }
-        }
+        persistSavedState();
       }
 
-      function draftDisplayName(draft) {
-        const athlete = String(draft.state.full_name || '').trim();
-        const name = athlete || draft.label || 'Chestionar nou';
-        let updated = '';
-        try {
-          updated = new Intl.DateTimeFormat('ro-RO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(draft.updatedAt));
-        } catch (error) {
-          updated = '';
-        }
-        return updated ? `${name} · ${updated}` : name;
-      }
-
-      function renderDraftOptions() {
-        const drafts = Object.values(draftStore.drafts)
-          .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
-        draftSelect.replaceChildren(...drafts.map((draft) => {
-          const option = document.createElement('option');
-          option.value = draft.id;
-          option.textContent = draftDisplayName(draft);
-          return option;
-        }));
-        draftSelect.value = draftStore.activeId;
-      }
-
-      function loadActiveDraft() {
+      function loadSavedForm() {
         clearTimeout(saveTimer);
         form.reset();
-        const draft = activeDraft();
-        if (draft) applyFormState(draft.state);
+        applyFormState(savedState);
         syncOtherFields();
         updateProgress();
-        renderDraftOptions();
-        autosaveStatus.textContent = 'Chestionarul activ a fost încărcat de pe acest dispozitiv.';
+        autosaveStatus.textContent = 'Răspunsurile salvate au fost încărcate de pe acest dispozitiv.';
       }
 
-      function saveForm(renderOptions = true) {
+      function saveForm() {
         try {
-          const draft = activeDraft();
-          if (!draft) return;
-          draft.state = getFormState();
-          const athlete = String(draft.state.full_name || '').trim();
-          if (athlete) draft.label = athlete;
-          draft.updatedAt = new Date().toISOString();
-          if (!persistDraftStore()) throw new Error('Local storage is unavailable.');
-          if (renderOptions) renderDraftOptions();
-          autosaveStatus.textContent = 'Răspunsurile acestui sportiv au fost salvate automat pe acest dispozitiv.';
+          savedState = getFormState();
+          if (!persistSavedState()) throw new Error('Local storage is unavailable.');
+          autosaveStatus.textContent = 'Răspunsurile au fost salvate automat pe acest dispozitiv.';
         } catch (error) {
           autosaveStatus.textContent = 'Salvarea automată nu este disponibilă în acest browser.';
         }
@@ -1526,29 +1381,6 @@
         clearTimeout(saveTimer);
         autosaveStatus.textContent = 'Se salvează răspunsurile.';
         saveTimer = setTimeout(saveForm, 180);
-      }
-
-      function createNewDraft() {
-        saveForm(false);
-        const labels = new Set(Object.values(draftStore.drafts).map((draft) => draft.label));
-        let number = 1;
-        while (labels.has(`Chestionar nou ${number}`)) number += 1;
-        const draft = makeDraft({}, `Chestionar nou ${number}`);
-        draftStore.drafts[draft.id] = draft;
-        draftStore.activeId = draft.id;
-        persistDraftStore();
-        loadActiveDraft();
-        showToast('Chestionar nou creat. Celelalte răspunsuri rămân salvate.');
-        requestAnimationFrame(() => document.getElementById('full-name').focus());
-      }
-
-      function switchDraft(id) {
-        if (!draftStore.drafts[id] || id === draftStore.activeId) return;
-        saveForm(false);
-        draftStore.activeId = id;
-        persistDraftStore();
-        loadActiveDraft();
-        showToast('Chestionarul selectat a fost încărcat.');
       }
 
       function syncOtherFields() {
@@ -1817,29 +1649,19 @@
       }
 
       function resetForm() {
-        const draft = activeDraft();
-        const athlete = draft ? String(draft.state.full_name || draft.label || 'acest sportiv').trim() : 'acest sportiv';
-        const confirmed = window.confirm(`Ștergi chestionarul pentru ${athlete}? Celelalte chestionare salvate nu vor fi afectate.`);
+        const confirmed = window.confirm('Ștergi toate răspunsurile salvate în acest browser?');
         if (!confirmed) return;
-        if (draft) delete draftStore.drafts[draft.id];
-        const remaining = Object.values(draftStore.drafts).sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
-        if (remaining.length) {
-          draftStore.activeId = remaining[0].id;
-        } else {
-          const replacement = makeDraft();
-          draftStore.drafts[replacement.id] = replacement;
-          draftStore.activeId = replacement.id;
-        }
-        persistDraftStore();
-        loadActiveDraft();
-        autosaveStatus.textContent = 'Chestionarul selectat a fost șters.';
-        showToast('Chestionarul a fost șters.');
+        savedState = {};
+        persistSavedState();
+        loadSavedForm();
+        autosaveStatus.textContent = 'Răspunsurile salvate au fost șterse.';
+        showToast('Răspunsurile au fost șterse.');
         document.getElementById('questionnaire').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
       renderRatings();
-      loadDraftStore();
-      loadActiveDraft();
+      loadSavedState();
+      loadSavedForm();
 
       form.addEventListener('input', () => {
         syncOtherFields();
@@ -1861,11 +1683,9 @@
 
       downloadButton.addEventListener('click', downloadPdf);
       resetButton.addEventListener('click', resetForm);
-      newDraftButton.addEventListener('click', createNewDraft);
-      draftSelect.addEventListener('change', () => switchDraft(draftSelect.value));
-      window.addEventListener('pagehide', () => saveForm(false));
+      window.addEventListener('pagehide', saveForm);
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') saveForm(false);
+        if (document.visibilityState === 'hidden') saveForm();
       });
     })();
   </script>
